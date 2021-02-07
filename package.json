@@ -1,0 +1,14 @@
+{
+  "name": "wifi-data-formatter",
+  "version": "1.0.0",
+  "description": "program for formatting data collected from wifi signups",
+  "main": "index.js",
+  "scripts": {
+    "test": "mocha spec/utils.spec.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "csv-parse": "^4.15.1"
+  }
+}
