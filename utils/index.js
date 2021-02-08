@@ -5,9 +5,25 @@ exports.formatPostcode = (postcode) => {
     return parts.join(' ');
 }
 
-exports.returnExpiryDate = (date) => {
-    const today = new Date();
-    if (!date) return new Date(today.setFullYear(today.getFullYear() + 3));
-    return new Date(date.setFullYear(date.getFullYear() + 3));
+exports.convertUKDateToUS = (dateString) => {
+    if (!dateString) return "";
+    const parts = dateString.split("/");
+    return `${parts[1]}/${parts[0]}/${parts[2]}`;
 }
+
+exports.returnExpiryDate = (date) => {
+    let in3Years;
+    if (typeof date === "string") {
+        const dateObj = new Date(exports.convertUKDateToUS(date));
+        in3Years = new Date(dateObj.setFullYear(dateObj.getFullYear() + 3));
+    } if (typeof date === "object") {
+        in3Years = new Date(date.setFullYear(date.getFullYear() + 3));
+    } if (!date) {
+        const today = new Date();
+        in3Years = new Date(today.setFullYear(today.getFullYear() + 3));
+    }
+    return `${in3Years.getUTCDate()}/${in3Years.getUTCMonth() + 1}/${in3Years.getUTCFullYear()}`;
+}
+
+
 
