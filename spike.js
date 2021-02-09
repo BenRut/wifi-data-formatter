@@ -14,7 +14,8 @@ const {
     returnExpiryDate,
     getDataByCenter,
     getCentres,
-    returnFileName
+    returnFileName,
+    formatDatum
 } = require("./utils");
 const Papa = require('papaparse')
 
@@ -29,15 +30,7 @@ const getData = async () => {
 
 getData().then(data => {
     const formattedData = data.map(datum => {
-        datum['Sign Up Source'] = "Wifi";
-        datum['Postcode'] = formatPostcode( datum['Postcode']);
-        if (datum['Week Ending']) {
-            datum['Expiry Date'] = returnExpiryDate(datum['Week Ending']);
-        };
-        if (!datum['Week Ending']) {
-            datum['Expiry Date'] = returnExpiryDate();
-        }
-        return datum;
+      return formatDatum(datum);
     })
     const centres = getCentres(data);
     for (let i = 0; i < centres.length; i++) {

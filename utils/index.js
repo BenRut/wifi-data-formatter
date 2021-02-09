@@ -50,4 +50,16 @@ exports.returnFileName = (centre) => {
     return `${centre.split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv`
 }
 
+exports.formatDatum = (datum) => {
+    datum['Sign Up Source'] = "Wifi";
+    datum['Postcode'] = exports.formatPostcode( datum['Postcode']);
+    if (datum['Week Ending']) {
+        datum['Expiry Date'] = exports.returnExpiryDate(datum['Week Ending']);
+    };
+    if (!datum['Week Ending']) {
+        datum['Expiry Date'] = exports.returnExpiryDate();
+    }
+    return datum;
+}
+
 
