@@ -18,7 +18,7 @@ const {
     formatDatum
 } = require("./utils");
 const Papa = require('papaparse')
-const filePath = './test-data/test-file-inkspot.csv';
+const filePath = './test-data/test-file-freerunner.csv';
 const csv = require('csvtojson');
 const getData = async () => {
     const data = await csv().fromFile(filePath);

@@ -282,7 +282,7 @@ describe("getDataByCentre()", () => {
   });
 
   describe('formatDatum', () => {
-    it('works for freerunner data', () => {
+    it('works for inkspot data', () => {
       const input = {
         username: '83902745032984573209854702394857203987',
         total_downloaded_bytes: '86897021',
@@ -307,6 +307,27 @@ describe("getDataByCentre()", () => {
         email: 'jhlkhlkj@live.co.uk',
         "sign up source": "wifi",
         "expiry date": "1/1/2024",
+      })
+    });
+    it('works for freerunner data', () => {
+      const input = {
+        username: 'gohlkhlk@hotmail.co.uk',
+        creationdate: '2020-12-05 11:31:21',
+        firstname: 'Super',
+        lastname: 'Hanz',
+        postcode: 'BS31SN',
+        opt_in: '1'
+      }
+      const output = formatDatum(input);
+      expect(output).to.eql({
+        username: 'gohlkhlk@hotmail.co.uk',
+        creationdate: '2020-12-05 11:31:21',
+        firstname: 'Super',
+        lastname: 'Hanz',
+        postcode: 'BS3 1SN',
+        opt_in: '1',
+        "sign up source": "wifi",
+        "expiry date": "5/12/2023",
       })
     });
   });
