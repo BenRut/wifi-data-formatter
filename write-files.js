@@ -1,13 +1,3 @@
-// const data = require("./test-data/test-file-asi.csv");
-// const csv = require('csv-parser');
-// const results = [];
-
-// fs.createReadStream('data.csv')
-//   .pipe(csv())
-//   .on('data', (data) => results.push(data))
-//   .on('end', () => {
-//     console.log(results);
-//   });
 const fs = require('fs');
 const {
     formatPostcode,
@@ -18,16 +8,17 @@ const {
     formatDatum
 } = require("./utils");
 const Papa = require('papaparse')
-const filePath = './test-data/test-file-freerunner.csv';
+const fileName = `test-file-l-and-g`
+const filePath = `./test-data/${fileName}.csv`;
 const csv = require('csvtojson');
 const getData = async () => {
     const data = await csv().fromFile(filePath);
     return data;   
 };
 
+// LIM and L&G
 
 getData().then(data => {
-    console.log(data);
     const formattedData = data.map(datum => {
       return formatDatum(datum);
     })
@@ -43,30 +34,14 @@ getData().then(data => {
     }
 });
 
+// Inkspot/Freerunner/ASI
 
-
-
-
-
-
-
-
-
-
-// csv()
-// .fromFile(filePath)
-// .then((data)=>{
-//    data.map(datum => {
-//         datum['Postcode'] = formatPostcode(datum['Postcode']);
-//         console.log(datum);
-//     });
+// getData().then(data => {
+//     const formattedData = data.map(datum => {
+//       return formatDatum(datum);
+//     })
+//         fs.writeFile(returnFileName(fileName), Papa.unparse(formattedData), (err) => {
+//             if (err) throw err;
+//             console.log(`${fileName} saved!`);
+//         });
 // });
-
-// constdata = await csv()
-// .fromFile(filePath);
-
-// const formattedPostcodes = data.map(datum => {
-//     console.log(datum);
-// });
-
-

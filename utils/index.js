@@ -61,12 +61,12 @@ exports.objectKeysToLowerCase = (object) => {
 exports.formatDatum = (datum) => {
     const lowerCaseDatum = exports.objectKeysToLowerCase(datum);
     lowerCaseDatum['sign up source'] = "wifi";
-    lowerCaseDatum['postcode'] = exports.formatPostcode( datum['postcode']);
+    lowerCaseDatum['postcode'] = exports.formatPostcode( lowerCaseDatum['postcode']);
     if (lowerCaseDatum['week ending']) {
-        lowerCaseDatum['expiry date'] = exports.returnExpiryDate(datum['week ending']);
+        lowerCaseDatum['expiry date'] = exports.returnExpiryDate(lowerCaseDatum['week ending']);
     };
     if (lowerCaseDatum['creationdate']) {
-        lowerCaseDatum['expiry date'] = exports.returnExpiryDate(datum['creationdate'].slice(0,10).split('-').reverse().join('/'));
+        lowerCaseDatum['expiry date'] = exports.returnExpiryDate(lowerCaseDatum['creationdate'].slice(0,10).split('-').reverse().join('/'));
     };
     if (!lowerCaseDatum['week ending'] && !lowerCaseDatum['creationdate']) {
         lowerCaseDatum['expiry date'] = exports.returnExpiryDate();
