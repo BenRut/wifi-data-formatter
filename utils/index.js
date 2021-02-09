@@ -50,16 +50,26 @@ exports.returnFileName = (centre) => {
     return `${centre.split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv`
 }
 
+exports.objectKeysToLowerCase = (object) => {
+    const newObject = {};
+    Object.keys(object).map((key => {
+        newObject[key.toLowerCase()] = object[key];
+    }));
+    return newObject
+}
+
 exports.formatDatum = (datum) => {
-    datum['Sign Up Source'] = "Wifi";
-    datum['Postcode'] = exports.formatPostcode( datum['Postcode']);
-    if (datum['Week Ending']) {
-        datum['Expiry Date'] = exports.returnExpiryDate(datum['Week Ending']);
+    const lowerCaseDatum = exports.objectKeysToLowerCase(datum);
+    lowerCaseDatum['sign up source'] = "wifi";
+    if (lowerCaseDatum)
+    lowerCaseDatum['postcode'] = exports.formatPostcode( datum['postcode']);
+    if (lowerCaseDatum['week ending']) {
+        lowerCaseDatum['expiry date'] = exports.returnExpiryDate(datum['week ending']);
     };
-    if (!datum['Week Ending']) {
-        datum['Expiry Date'] = exports.returnExpiryDate();
+    if (!lowerCaseDatum['week ending']) {
+        lowerCaseDatum['expiry date'] = exports.returnExpiryDate();
     }
-    return datum;
+    return lowerCaseDatum;
 }
 
 

@@ -18,9 +18,7 @@ const {
     formatDatum
 } = require("./utils");
 const Papa = require('papaparse')
-
-// let data;
-const filePath = './test-data/test-file-l-and-g.csv';
+const filePath = './test-data/test-file-inkspot.csv';
 const csv = require('csvtojson');
 const getData = async () => {
     const data = await csv().fromFile(filePath);
@@ -29,6 +27,7 @@ const getData = async () => {
 
 
 getData().then(data => {
+    console.log(data);
     const formattedData = data.map(datum => {
       return formatDatum(datum);
     })
@@ -43,6 +42,8 @@ getData().then(data => {
         });
     }
 });
+
+
 
 
 

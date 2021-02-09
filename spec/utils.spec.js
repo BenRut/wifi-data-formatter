@@ -5,7 +5,9 @@ const {
     convertUKDateToUS,
     returnExpiryDate,
     getDataByCentre,
-    getCentres
+    getCentres,
+    formatDatum,
+    objectKeysToLowerCase
 } = require("../utils");
 const testData = [
     {
@@ -269,3 +271,43 @@ describe("getDataByCentre()", () => {
         expect(getCentres(testData)).to.eql(["JLLS  Grosvenor Centre Shopping", "Jackson Square Shopping Centre", "Eastbourne Beacon Shopping Centre", "JLL Grafton"]);
       });
   });
+
+  describe('objectKeysToLowerCase', () => {
+    it('returns an object when passed an object', () => {
+      expect(objectKeysToLowerCase({})).to.be.an('object');
+    });
+    it('returns an object with key in lower case when passed an object with key in upper case', () => {
+      expect(objectKeysToLowerCase({A:1})).to.eql({a:1});
+    });
+  });
+
+  describe('formatDatum', () => {
+    it('works for freerunner data', () => {
+      const input = {
+        username: '83902745032984573209854702394857203987',
+        total_downloaded_bytes: '86897021',
+        total_uploaded_bytes: '3137211',
+        total_sessions: '4',
+        online_time_seconds: '2256',
+        postcode: 'M67vw',
+        gender: '',
+        agent_device: 'iPhone',
+        email: 'jhlkhlkj@live.co.uk'
+      }
+      const output = formatDatum(input);
+      expect(output).to.eql({
+        username: '83902745032984573209854702394857203987',
+        total_downloaded_bytes: '86897021',
+        total_uploaded_bytes: '3137211',
+        total_sessions: '4',
+        online_time_seconds: '2256',
+        postcode: 'M6 7VW',
+        gender: '',
+        agent_device: 'iPhone',
+        email: 'jhlkhlkj@live.co.uk',
+        "sign up source": "wifi",
+        "expiry date": "1/1/2024",
+      })
+    });
+  });
+
