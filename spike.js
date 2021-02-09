@@ -28,6 +28,7 @@ const getData = async () => {
 
 getData().then(data => {
     const formattedData = data.map(datum => {
+        datum['Sign Up Source'] = "Wifi";
         datum['Postcode'] = formatPostcode( datum['Postcode']);
         if (datum['Week Ending']) {
             datum['Expiry Date'] = returnExpiryDate(datum['Week Ending']);
@@ -39,14 +40,21 @@ getData().then(data => {
     })
     const centres = getCentres(data);
     for (let i = 0; i < centres.length; i++) {
-        fs.writeFile(`${centres[i]}.csv`, Papa.unparse(formattedData.filter((datum) => {
-            return datum["Registration Location Name"] === centres[i];
+        const date = new Date ();
+            const monthNames = ["jan", "feb", "mar", "apr", "may", "jun",
+            "jul", "aug", "sep", "oct", "nov", "dec"
+            ];
+            const lastMonth = monthNames[date.getMonth() - 1];
+        fs.writeFile(`${centres[i].split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv`, Papa.unparse(formattedData.filter((datum) => {
+            return datum['Registration Location Name'] === centres[i];
         })), (err) => {
             if (err) throw err;
-            console.log('CSV saved!');
+            console.log(`${centres[i].split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv saved!`);
         });
     }
 });
+
+
 
 
 
