@@ -19,8 +19,11 @@ exports.returnExpiryDate = (date) => {
     } if (typeof date === "object") {
         in3Years = new Date(date.setFullYear(date.getFullYear() + 3));
     } if (!date) {
+        const months = ['1', '2', '3', '4', '5', '6', '7', '8', '9', '10', '11', '12'];
         const today = new Date();
-        in3Years = new Date(today.setFullYear(today.getFullYear() + 3));
+        const lastMonth = months.slice(today.getMonth() - 1)[0];
+        const threeYearsFromNow = today.getFullYear() + 3;
+        return `1/${lastMonth}/${threeYearsFromNow}`;
     }
     return `${in3Years.getUTCDate()}/${in3Years.getUTCMonth() + 1}/${in3Years.getUTCFullYear()}`;
 }
