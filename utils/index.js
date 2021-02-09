@@ -43,4 +43,11 @@ exports.getCentres = (data) => {
     }, []);
 }
 
+exports.returnFileName = (centre) => {
+    const date = new Date ();
+    const monthNames = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    const lastMonth = monthNames[date.getMonth() - 1];
+    return `${centre.split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv`
+}
+
 

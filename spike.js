@@ -13,7 +13,8 @@ const {
     formatPostcode,
     returnExpiryDate,
     getDataByCenter,
-    getCentres
+    getCentres,
+    returnFileName
 } = require("./utils");
 const Papa = require('papaparse')
 
@@ -40,16 +41,12 @@ getData().then(data => {
     })
     const centres = getCentres(data);
     for (let i = 0; i < centres.length; i++) {
-        const date = new Date ();
-            const monthNames = ["jan", "feb", "mar", "apr", "may", "jun",
-            "jul", "aug", "sep", "oct", "nov", "dec"
-            ];
-            const lastMonth = monthNames[date.getMonth() - 1];
-        fs.writeFile(`${centres[i].split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv`, Papa.unparse(formattedData.filter((datum) => {
+        const fileName = returnFileName(centres[i]);
+        fs.writeFile(fileName, Papa.unparse(formattedData.filter((datum) => {
             return datum['Registration Location Name'] === centres[i];
         })), (err) => {
             if (err) throw err;
-            console.log(`${centres[i].split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv saved!`);
+            console.log(`${fileName} saved!`);
         });
     }
 });
