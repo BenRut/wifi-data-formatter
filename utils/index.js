@@ -25,5 +25,19 @@ exports.returnExpiryDate = (date) => {
     return `${in3Years.getUTCDate()}/${in3Years.getUTCMonth() + 1}/${in3Years.getUTCFullYear()}`;
 }
 
+exports.getDataByCentre = (data, centre) => {
+    return data.filter((datum) => {
+        return datum["Registration Location Name"] === centre;
+    });
+}
+
+exports.getCentres = (data) => {
+    return data.reduce((centres, datum)=>{
+        if (!centres.includes(datum["Registration Location Name"])) {
+            centres.push(datum["Registration Location Name"]);
+        }
+        return centres;
+    }, []);
+}
 
 

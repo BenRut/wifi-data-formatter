@@ -3,8 +3,145 @@ const { it } = require('mocha');
 const {
     formatPostcode,
     convertUKDateToUS,
-    returnExpiryDate
+    returnExpiryDate,
+    getDataByCentre,
+    getCentres
 } = require("../utils");
+const testData = [
+    {
+      'Email Address': '588@gmail.com',
+      Title: 'Mr',
+      Forename: 'Nile',
+      Surname: 'Rogers',
+      Postcode: 'MI44 1JZ',
+      'Mobile Number': '01219877583',
+      'Registration Location ID': 'JLLS-LGGRO-01',
+      'Registration Location Name': 'JLLS  Grosvenor Centre Shopping',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    },
+    {
+      'Email Address': '188@hotmail.com',
+      Title: 'Ms',
+      Forename: 'Alicia',
+      Surname: 'Keys',
+      Postcode: 'CM6 1XF',
+      'Mobile Number': '01219877583',
+      'Registration Location ID': 'JLLS-LGJAC-01',
+      'Registration Location Name': 'Jackson Square Shopping Centre',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    },
+    {
+      'Email Address': '133@outlook.com',
+      Title: 'Ms',
+      Forename: 'Gladys',
+      Surname: 'Knight',
+      Postcode: 'BN22 9PA',
+      'Mobile Number': '01219877583',
+      'Registration Location ID': 'JLLS-LGEAS-01',
+      'Registration Location Name': 'Eastbourne Beacon Shopping Centre',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    },
+    {
+      'Email Address': 'jhij@gmail.com',
+      Title: 'Mr',
+      Forename: 'R',
+      Surname: 'Kelly',
+      Postcode: 'CB23 8TL',
+      'Mobile Number': 'NOT CAPTURED',
+      'Registration Location ID': 'JLLS-LGGRA-01',
+      'Registration Location Name': 'JLL Grafton',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    },
+    {
+      'Email Address': '8365@gmail.com',
+      Title: 'Mr',
+      Forename: 'Bootsy',
+      Surname: 'Collins',
+      Postcode: 'CM23 1FL',
+      'Mobile Number': '01219877583',
+      'Registration Location ID': 'JLLS-LGJAC-01',
+      'Registration Location Name': 'Jackson Square Shopping Centre',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    },
+    {
+      'Email Address': '856@outlook.com',
+      Title: 'Mr',
+      Forename: 'Rick',
+      Surname: 'James',
+      Postcode: 'BN22 8JT',
+      'Mobile Number': 'NOT CAPTURED',
+      'Registration Location ID': 'JLLS-LGEAS-01',
+      'Registration Location Name': 'Eastbourne Beacon Shopping Centre',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    },
+    {
+      'Email Address': 'c846@gmail.com',
+      Title: 'Mr',
+      Forename: 'James',
+      Surname: 'Brown',
+      Postcode: 'CM23 3WD',
+      'Mobile Number': '01219877583',
+      'Registration Location ID': 'JLLS-LGJAC-01',
+      'Registration Location Name': 'Jackson Square Shopping Centre',
+      'Marketing Opt In': 'Yes',
+      'Expiry Date': '8/2/2024'
+    }];
+
+const noDupes = [
+        {
+          'Email Address': '588@gmail.com',
+          Title: 'Mr',
+          Forename: 'Nile',
+          Surname: 'Rogers',
+          Postcode: 'MI44 1JZ',
+          'Mobile Number': '01219877583',
+          'Registration Location ID': 'JLLS-LGGRO-01',
+          'Registration Location Name': 'JLLS  Grosvenor Centre Shopping',
+          'Marketing Opt In': 'Yes',
+          'Expiry Date': '8/2/2024'
+        },
+        {
+          'Email Address': '188@hotmail.com',
+          Title: 'Ms',
+          Forename: 'Alicia',
+          Surname: 'Keys',
+          Postcode: 'CM6 1XF',
+          'Mobile Number': '01219877583',
+          'Registration Location ID': 'JLLS-LGJAC-01',
+          'Registration Location Name': 'Jackson Square Shopping Centre',
+          'Marketing Opt In': 'Yes',
+          'Expiry Date': '8/2/2024'
+        },
+        {
+          'Email Address': '133@outlook.com',
+          Title: 'Ms',
+          Forename: 'Gladys',
+          Surname: 'Knight',
+          Postcode: 'BN22 9PA',
+          'Mobile Number': '01219877583',
+          'Registration Location ID': 'JLLS-LGEAS-01',
+          'Registration Location Name': 'Eastbourne Beacon Shopping Centre',
+          'Marketing Opt In': 'Yes',
+          'Expiry Date': '8/2/2024'
+        },
+        {
+          'Email Address': 'jhij@gmail.com',
+          Title: 'Mr',
+          Forename: 'R',
+          Surname: 'Kelly',
+          Postcode: 'CB23 8TL',
+          'Mobile Number': 'NOT CAPTURED',
+          'Registration Location ID': 'JLLS-LGGRA-01',
+          'Registration Location Name': 'JLL Grafton',
+          'Marketing Opt In': 'Yes',
+          'Expiry Date': '8/2/2024'
+        }]
 
 describe('formatPostcode', () => {
     it('returns a string when passed a string', () => {
@@ -76,3 +213,58 @@ describe('returnsExpiryDate()', () => {
         expect(output).to.equal("1/1/2003");
     });
 });
+
+describe("getDataByCentre()", () => {
+    it("returns [] when passed []", () => {
+      expect(getDataByCentre([])).to.eql([]);
+    });
+    it("returns array containing objects of only the centre specified in argument", () => {
+        expect(getDataByCentre(testData, "Jackson Square Shopping Centre")).to.eql([
+            {
+                'Email Address': '188@hotmail.com',
+                Title: 'Ms',
+                Forename: 'Alicia',
+                Surname: 'Keys',
+                Postcode: 'CM6 1XF',
+                'Mobile Number': '01219877583',
+                'Registration Location ID': 'JLLS-LGJAC-01',
+                'Registration Location Name': 'Jackson Square Shopping Centre',
+                'Marketing Opt In': 'Yes',
+                'Expiry Date': '8/2/2024'
+              }, {
+                'Email Address': '8365@gmail.com',
+                Title: 'Mr',
+                Forename: 'Bootsy',
+                Surname: 'Collins',
+                Postcode: 'CM23 1FL',
+                'Mobile Number': '01219877583',
+                'Registration Location ID': 'JLLS-LGJAC-01',
+                'Registration Location Name': 'Jackson Square Shopping Centre',
+                'Marketing Opt In': 'Yes',
+                'Expiry Date': '8/2/2024'
+              }, {
+                'Email Address': 'c846@gmail.com',
+                Title: 'Mr',
+                Forename: 'James',
+                Surname: 'Brown',
+                Postcode: 'CM23 3WD',
+                'Mobile Number': '01219877583',
+                'Registration Location ID': 'JLLS-LGJAC-01',
+                'Registration Location Name': 'Jackson Square Shopping Centre',
+                'Marketing Opt In': 'Yes',
+                'Expiry Date': '8/2/2024'
+              }]);
+      });
+  });
+
+  describe('getCentres', () => {
+      it('returns an array when passed an array', () => {
+          expect(getCentres([])).to.be.an("array");
+      });
+      it('returns an array of centre names for list with no duplicates', () => {
+          expect(getCentres(noDupes)).to.eql(["JLLS  Grosvenor Centre Shopping", "Jackson Square Shopping Centre", "Eastbourne Beacon Shopping Centre", "JLL Grafton"]);
+      });
+      it('returns an array of centre names with no duplicates when passed an array with duplicate centre names', () => {
+        expect(getCentres(testData)).to.eql(["JLLS  Grosvenor Centre Shopping", "Jackson Square Shopping Centre", "Eastbourne Beacon Shopping Centre", "JLL Grafton"]);
+      });
+  });
