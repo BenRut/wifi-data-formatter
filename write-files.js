@@ -62,4 +62,7 @@ const createSingleFile = (fileName) => {
 
 
 
-createSingleFile(fileName);
+module.exports = {
+    createMultipleFiles,
+    createSingleFile
+}
