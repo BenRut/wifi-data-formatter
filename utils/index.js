@@ -44,9 +44,9 @@ exports.getCentres = (data) => {
 }
 
 exports.returnFileName = (centre) => {
-    const date = new Date ();
-    const monthNames = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
-    const lastMonth = monthNames[date.getMonth() - 1];
+    const today = new Date ();
+    const months = ["jan", "feb", "mar", "apr", "may", "jun", "jul", "aug", "sep", "oct", "nov", "dec"];
+    const lastMonth = months.slice(today.getMonth() - 1)[0];
     return `${centre.split(" ").join("-").toLowerCase()}-${lastMonth}-wifi.csv`
 }
 
@@ -72,6 +72,45 @@ exports.formatDatum = (datum) => {
         lowerCaseDatum['expiry date'] = exports.returnExpiryDate();
     }
     return lowerCaseDatum;
+}
+
+exports.removeDuplicateEmails = (data) => {
+    if (data.length === 0) return data;
+    const columns = Object.keys(data[0]);
+    let emailKey;
+    emailColumnVariants = ['email address', 'Email Address', 'email', 'username']
+    emailColumnVariants.forEach((variant)=> {
+        if (columns.includes(variant)) {
+            emailKey = variant
+        }
+    })
+    const loggedEmails = [];
+    return data.reduce((deDupedArray, datum)=>{
+       (datum);
+        if (!loggedEmails.includes(datum['Email Address'])) {
+            loggedEmails.push(datum[emailKey]);
+            deDupedArray.push(datum);
+        }
+        return deDupedArray;
+    }, [])
+}
+
+exports.filterDataByMonth = (data, month) => {
+    if (!month) {
+        const today = new Date();
+        const months = ["01", "02", "03", "04", "05", "06", "07", "08", "09", "10", "11", "12"];
+        month = months.slice(today.getMonth() - 1)[0];
+    } else if (month.length === 1) {
+        month = `0${month.toString()}`
+    } 
+    
+    return data.filter((datum)=>{
+        if (!month) {
+            return datum["creationdate"].slice(0,10).split('-')[1] === lastMonth;
+        } else {
+            return datum["creationdate"].slice(0,10).split('-')[1] == month;
+        }
+    })
 }
 
 

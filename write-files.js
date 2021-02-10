@@ -5,10 +5,12 @@ const {
     getDataByCenter,
     getCentres,
     returnFileName,
-    formatDatum
+    formatDatum,
+    filterDataByMonth,
+    removeDuplicateEmails
 } = require("./utils");
 const Papa = require('papaparse')
-const fileName = `test-file-l-and-g`
+const fileName = `test-file-freerunner`
 const filePath = `./test-data/${fileName}.csv`;
 const csv = require('csvtojson');
 const getData = async () => {
@@ -18,30 +20,44 @@ const getData = async () => {
 
 // LIM and L&G
 
-getData().then(data => {
-    const formattedData = data.map(datum => {
-      return formatDatum(datum);
-    })
-    const centres = getCentres(data);
-    for (let i = 0; i < centres.length; i++) {
-        const fileName = returnFileName(centres[i]);
-        fs.writeFile(fileName, Papa.unparse(formattedData.filter((datum) => {
-            return datum['Registration Location Name'] === centres[i];
-        })), (err) => {
-            if (err) throw err;
-            console.log(`${fileName} saved!`);
-        });
-    }
-});
+const createMultipleFiles = (fileName) => {
+    getData().then(data => {
+        const formattedData = data.map(datum => {
+          return formatDatum(datum);
+        })
+        const filteredByMonth = filterDataByMonth(formattedData);
+        const deDuped = removeDuplicateEmails(filteredByMonth);
+        const centres = getCentres(data);
+        for (let i = 0; i < centres.length; i++) {
+            const fileName = returnFileName(centres[i]);
+            fs.writeFile(fileName, Papa.unparse(deDuped.filter((datum) => {
+                return datum['Registration Location Name'] === centres[i];
+            })), (err) => {
+                if (err) throw err;
+                console.log(`${fileName} saved!`);
+            });
+        }
+    });
+}
+
+
 
 // Inkspot/Freerunner/ASI
 
-// getData().then(data => {
-//     const formattedData = data.map(datum => {
-//       return formatDatum(datum);
-//     })
-//         fs.writeFile(returnFileName(fileName), Papa.unparse(formattedData), (err) => {
-//             if (err) throw err;
-//             console.log(`${fileName} saved!`);
-//         });
-// });
+const createSingleFile = (fileName) => {
+    getData().then(data => {
+        const formattedData = data.map(datum => {
+          return formatDatum(datum);
+        })
+        const filteredByMonth = filterDataByMonth(formattedData);
+        const deDuped = removeDuplicateEmails(filteredByMonth);
+            fs.writeFile(returnFileName(fileName), Papa.unparse(deDuped), (err) => {
+                if (err) throw err;
+                console.log(`${returnFileName(fileName)} saved!`);
+            });
+    });
+}
+
+
+
+createSingleFile(fileName);

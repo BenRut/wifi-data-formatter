@@ -7,7 +7,9 @@ const {
     getDataByCentre,
     getCentres,
     formatDatum,
-    objectKeysToLowerCase
+    objectKeysToLowerCase,
+    filterDataByMonth,
+    removeDuplicateEmails
 } = require("../utils");
 const testData = [
     {
@@ -329,6 +331,410 @@ describe("getDataByCentre()", () => {
         "sign up source": "wifi",
         "expiry date": "5/12/2023",
       })
+    });
+  });
+
+  describe('removeDuplicateEmails', () => {
+    it('returns an empty array when passed an array', () => {
+      expect(removeDuplicateEmails([])).to.eql([]);
+    });
+    it('returns an array containing 1 object when passed 1 object', () => {
+      const input = [{
+        'Email Address': '8365@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 1FL',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }];
+      expect(removeDuplicateEmails(input)).to.eql(input);
+    });
+    it('returns an array containing 1 object when passed mutiple objects with same email address', () => {
+      const input = [{
+        'Email Address': 'bootsy.collins@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 1FL',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }, {
+        'Email Address': 'bootsy.collins@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 3WD',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }];
+      expect(removeDuplicateEmails(input)).to.eql([{
+        'Email Address': 'bootsy.collins@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 1FL',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }]);
+    });
+    it('it returns an array containing 2 objects when passed mutiple objects with only 2 email addresses', () => {
+      const input = [{
+        'Email Address': 'bootsy.collins@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 1FL',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      },{
+        'Email Address': 'james.brown@gmail.com',
+        Title: 'Mr',
+        Forename: 'James',
+        Surname: 'Brown',
+        Postcode: 'CM23 3WD',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      },{
+        'Email Address': 'bootsy.collins@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 1FL',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }, {
+        'Email Address': 'james.brown@gmail.com',
+        Title: 'Mr',
+        Forename: 'James',
+        Surname: 'Brown',
+        Postcode: 'CM23 3WD',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }];
+      expect(removeDuplicateEmails(input)).to.eql([{
+        'Email Address': 'bootsy.collins@gmail.com',
+        Title: 'Mr',
+        Forename: 'Bootsy',
+        Surname: 'Collins',
+        Postcode: 'CM23 1FL',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      },{
+        'Email Address': 'james.brown@gmail.com',
+        Title: 'Mr',
+        Forename: 'James',
+        Surname: 'Brown',
+        Postcode: 'CM23 3WD',
+        'Mobile Number': '01219877583',
+        'Registration Location ID': 'JLLS-LGJAC-01',
+        'Registration Location Name': 'Jackson Square Shopping Centre',
+        'Marketing Opt In': 'Yes',
+        'Expiry Date': '8/2/2024'
+      }])
+    });
+  });
+
+  describe('filterDataByMonth', () => {
+    it('returns an empty array when passed an empty array', () => {
+      expect(filterDataByMonth([])).to.eql([]);
+    });
+    it('returns an array containing 1 object with dated last month when passed object dated last month and no month', () => {
+      const testData = [
+        {
+          username: 'uhfgkjg@gmail.com',
+          creationdate: '2021-02-01 15:09:46',
+          firstname: 'Chris',
+          lastname: 'Morris',
+          postcode: 'Tu20 7TW',
+          opt_in: '1'
+        },
+        {
+          username: 'jkjvk@yahoo.co.uk',
+          creationdate: '2021-01-30 17:14:01',
+          firstname: 'Sylvester',
+          lastname: 'Stuart',
+          postcode: 'Ty7 6UV',
+          opt_in: '1'
+        }];
+      expect(filterDataByMonth(testData)).to.eql([{
+        username: 'jkjvk@yahoo.co.uk',
+        creationdate: '2021-01-30 17:14:01',
+        firstname: 'Sylvester',
+        lastname: 'Stuart',
+        postcode: 'Ty7 6UV',
+        opt_in: '1'
+      }]);
+    });
+    it('returns an array containing only objects with last month\'s date when passed multiple objects and no month', () => {
+      const testData = [
+        {
+          username: 'uhfgkjg@gmail.com',
+          creationdate: '2021-02-01 15:09:46',
+          firstname: 'Chris',
+          lastname: 'Morris',
+          postcode: 'Tu20 7TW',
+          opt_in: '1'
+        },
+        {
+          username: 'jkjvk@yahoo.co.uk',
+          creationdate: '2021-01-30 17:14:01',
+          firstname: 'Sylvester',
+          lastname: 'Stuart',
+          postcode: 'Ty7 6UV',
+          opt_in: '1'
+        },
+        {
+          username: 'ijgkjvko@jbkjbk.uk',
+          creationdate: '2021-01-29 14:14:56',
+          firstname: 'Alan',
+          lastname: 'Partridge',
+          postcode: 'Bd79zy',
+          opt_in: '1'
+        },
+        {
+          username: 'ugkjgkj942@gmail.com',
+          creationdate: '2021-01-29 13:18:52',
+          firstname: 'Ted',
+          lastname: 'Maul',
+          postcode: 'Hs167QM',
+          opt_in: '1'
+        },
+        {
+          username: 'jhglkl@gmail.com',
+          creationdate: '2020-12-05 15:32:27',
+          firstname: 'Ali',
+          lastname: 'G',
+          postcode: 'BS1 5JZ',
+          opt_in: '1'
+        },
+        {
+          username: 'igkjhlkhlkhl@gmail.com',
+          creationdate: '2020-12-05 14:22:54',
+          firstname: 'Bernard',
+          lastname: 'Black',
+          postcode: 'JW307MW',
+          opt_in: '1'
+        },
+        {
+          username: 'kjhgkj@icloud.com',
+          creationdate: '2020-12-05 14:18:35',
+          firstname: 'Jeremy',
+          lastname: 'Usbourne',
+          postcode: 'HR75 9JW',
+          opt_in: '1'
+        },
+        {
+          username: 'khlkhl@gmail.com',
+          creationdate: '2020-12-05 12:13:04',
+          firstname: 'Mark',
+          lastname: 'Corrigan',
+          postcode: 'hg5 3nm',
+          opt_in: '1'
+        },
+        {
+          username: 'gohlkhlk@hotmail.co.uk',
+          creationdate: '2020-12-05 11:31:21',
+          firstname: 'Super',
+          lastname: 'Hanz',
+          postcode: 'BS31SN',
+          opt_in: '1'
+        }
+      ];
+      expect(filterDataByMonth(testData)).to.eql([
+        {
+          username: 'jkjvk@yahoo.co.uk',
+          creationdate: '2021-01-30 17:14:01',
+          firstname: 'Sylvester',
+          lastname: 'Stuart',
+          postcode: 'Ty7 6UV',
+          opt_in: '1'
+        },
+        {
+          username: 'ijgkjvko@jbkjbk.uk',
+          creationdate: '2021-01-29 14:14:56',
+          firstname: 'Alan',
+          lastname: 'Partridge',
+          postcode: 'Bd79zy',
+          opt_in: '1'
+        },
+        {
+          username: 'ugkjgkj942@gmail.com',
+          creationdate: '2021-01-29 13:18:52',
+          firstname: 'Ted',
+          lastname: 'Maul',
+          postcode: 'Hs167QM',
+          opt_in: '1'
+        }
+      ])
+      
+    });
+    it('returns an array containing only the data of a given month', () => {
+      const testData = [
+        {
+          username: 'uhfgkjg@gmail.com',
+          creationdate: '2021-02-01 15:09:46',
+          firstname: 'Chris',
+          lastname: 'Morris',
+          postcode: 'Tu20 7TW',
+          opt_in: '1'
+        },
+        {
+          username: 'jkjvk@yahoo.co.uk',
+          creationdate: '2021-01-30 17:14:01',
+          firstname: 'Sylvester',
+          lastname: 'Stuart',
+          postcode: 'Ty7 6UV',
+          opt_in: '1'
+        },
+        {
+          username: 'ijgkjvko@jbkjbk.uk',
+          creationdate: '2021-01-29 14:14:56',
+          firstname: 'Alan',
+          lastname: 'Partridge',
+          postcode: 'Bd79zy',
+          opt_in: '1'
+        },
+        {
+          username: 'ugkjgkj942@gmail.com',
+          creationdate: '2021-01-29 13:18:52',
+          firstname: 'Ted',
+          lastname: 'Maul',
+          postcode: 'Hs167QM',
+          opt_in: '1'
+        },
+        {
+          username: 'jhglkl@gmail.com',
+          creationdate: '2020-12-05 15:32:27',
+          firstname: 'Ali',
+          lastname: 'G',
+          postcode: 'BS1 5JZ',
+          opt_in: '1'
+        },
+        {
+          username: 'igkjhlkhlkhl@gmail.com',
+          creationdate: '2020-12-05 14:22:54',
+          firstname: 'Bernard',
+          lastname: 'Black',
+          postcode: 'JW307MW',
+          opt_in: '1'
+        },
+        {
+          username: 'kjhgkj@icloud.com',
+          creationdate: '2020-12-05 14:18:35',
+          firstname: 'Jeremy',
+          lastname: 'Usbourne',
+          postcode: 'HR75 9JW',
+          opt_in: '1'
+        },
+        {
+          username: 'khlkhl@gmail.com',
+          creationdate: '2020-12-05 12:13:04',
+          firstname: 'Mark',
+          lastname: 'Corrigan',
+          postcode: 'hg5 3nm',
+          opt_in: '1'
+        },
+        {
+          username: 'gohlkhlk@hotmail.co.uk',
+          creationdate: '2020-12-05 11:31:21',
+          firstname: 'Super',
+          lastname: 'Hanz',
+          postcode: 'BS31SN',
+          opt_in: '1'
+        }
+      ];
+      expect(filterDataByMonth(testData, 12)).to.eql([{
+        username: 'jhglkl@gmail.com',
+        creationdate: '2020-12-05 15:32:27',
+        firstname: 'Ali',
+        lastname: 'G',
+        postcode: 'BS1 5JZ',
+        opt_in: '1'
+      },
+      {
+        username: 'igkjhlkhlkhl@gmail.com',
+        creationdate: '2020-12-05 14:22:54',
+        firstname: 'Bernard',
+        lastname: 'Black',
+        postcode: 'JW307MW',
+        opt_in: '1'
+      },
+      {
+        username: 'kjhgkj@icloud.com',
+        creationdate: '2020-12-05 14:18:35',
+        firstname: 'Jeremy',
+        lastname: 'Usbourne',
+        postcode: 'HR75 9JW',
+        opt_in: '1'
+      },
+      {
+        username: 'khlkhl@gmail.com',
+        creationdate: '2020-12-05 12:13:04',
+        firstname: 'Mark',
+        lastname: 'Corrigan',
+        postcode: 'hg5 3nm',
+        opt_in: '1'
+      },
+      {
+        username: 'gohlkhlk@hotmail.co.uk',
+        creationdate: '2020-12-05 11:31:21',
+        firstname: 'Super',
+        lastname: 'Hanz',
+        postcode: 'BS31SN',
+        opt_in: '1'
+      }]);
+      expect(filterDataByMonth(testData, 2)).to.eql([{
+        username: 'uhfgkjg@gmail.com',
+        creationdate: '2021-02-01 15:09:46',
+        firstname: 'Chris',
+        lastname: 'Morris',
+        postcode: 'Tu20 7TW',
+        opt_in: '1'
+      }]);
+      expect(filterDataByMonth(testData, '2')).to.eql([{
+        username: 'uhfgkjg@gmail.com',
+        creationdate: '2021-02-01 15:09:46',
+        firstname: 'Chris',
+        lastname: 'Morris',
+        postcode: 'Tu20 7TW',
+        opt_in: '1'
+      }]);
+      expect(filterDataByMonth(testData, '02')).to.eql([{
+        username: 'uhfgkjg@gmail.com',
+        creationdate: '2021-02-01 15:09:46',
+        firstname: 'Chris',
+        lastname: 'Morris',
+        postcode: 'Tu20 7TW',
+        opt_in: '1'
+      }]);
     });
   });
 
