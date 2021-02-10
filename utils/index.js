@@ -84,10 +84,13 @@ exports.removeDuplicateEmails = (data) => {
             emailKey = variant
         }
     })
+    if (columns.includes('username') && columns.includes('email')) {
+        emailKey = 'email';
+    }
     const loggedEmails = [];
     return data.reduce((deDupedArray, datum)=>{
        (datum);
-        if (!loggedEmails.includes(datum['Email Address'])) {
+        if (!loggedEmails.includes(datum[emailKey])) {
             loggedEmails.push(datum[emailKey]);
             deDupedArray.push(datum);
         }

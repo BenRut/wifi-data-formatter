@@ -50,7 +50,9 @@ const createSingleFile = (fileName) => {
           return formatDatum(datum);
         })
         const filteredByMonth = filterDataByMonth(formattedData);
+        console.log('filteredByMonth:', filteredByMonth);
         const deDuped = removeDuplicateEmails(filteredByMonth);
+        console.log('deDuped:',deDuped);
             fs.writeFile(returnFileName(fileName), Papa.unparse(deDuped), (err) => {
                 if (err) throw err;
                 console.log(`${returnFileName(fileName)} saved!`);
