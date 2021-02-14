@@ -116,7 +116,12 @@ exports.removeDuplicateEmails = (data) => {
 	if (data.length === 0) return data;
 	const columns = Object.keys(data[0]);
 	let emailKey;
-	emailColumnVariants = ['email address', 'Email Address', 'email', 'username'];
+	const emailColumnVariants = [
+		'email address',
+		'Email Address',
+		'email',
+		'username',
+	];
 	emailColumnVariants.forEach((variant) => {
 		if (columns.includes(variant)) {
 			emailKey = variant;
@@ -127,7 +132,6 @@ exports.removeDuplicateEmails = (data) => {
 	}
 	const loggedEmails = [];
 	return data.reduce((deDupedArray, datum) => {
-		datum;
 		if (!loggedEmails.includes(datum[emailKey])) {
 			loggedEmails.push(datum[emailKey]);
 			deDupedArray.push(datum);
@@ -137,6 +141,7 @@ exports.removeDuplicateEmails = (data) => {
 };
 
 exports.filterDataByMonth = (data, month) => {
+	if (!Object.keys(data[0]).includes('creationdate')) return data;
 	if (!month) {
 		const today = new Date();
 		const months = [
@@ -157,10 +162,9 @@ exports.filterDataByMonth = (data, month) => {
 	} else if (month.length === 1) {
 		month = `0${month.toString()}`;
 	}
-
 	return data.filter((datum) => {
 		if (!month) {
-			return datum['creationdate'].slice(0, 10).split('-')[1] === lastMonth;
+			return datum['creationdate'].slice(0, 10).split('-')[1] === month;
 		} else {
 			return datum['creationdate'].slice(0, 10).split('-')[1] == month;
 		}

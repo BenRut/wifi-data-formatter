@@ -1,23 +1,23 @@
 {
-  "name": "wifi-data-formatter",
-  "version": "1.0.0",
-  "description": "program for formatting data collected from wifi signups",
-  "main": "index.js",
-  "scripts": {
-    "test": "mocha spec/utils.spec.js"
-  },
-  "author": "",
-  "license": "ISC",
-  "dependencies": {
-    "axios": "^0.21.1",
-    "cors": "^2.8.5",
-    "csv-parse": "^4.15.1",
-    "csv-parser": "^3.0.0",
-    "csvtojson": "^2.0.10",
-    "express": "^4.17.1",
-    "express-fileupload": "^1.2.1",
-    "multer": "^1.4.2",
-    "nodemon": "^2.0.7",
-    "papaparse": "^5.3.0"
-  }
+	"name": "wifi-data-formatter",
+	"version": "1.0.0",
+	"description": "program for formatting data collected from wifi signups",
+	"main": "index.js",
+	"scripts": {
+		"test": "mocha front-end/src/spec/utils.spec.js"
+	},
+	"author": "",
+	"license": "ISC",
+	"dependencies": {
+		"axios": "^0.21.1",
+		"cors": "^2.8.5",
+		"csv-parse": "^4.15.1",
+		"csv-parser": "^3.0.0",
+		"csvtojson": "^2.0.10",
+		"express": "^4.17.1",
+		"express-fileupload": "^1.2.1",
+		"multer": "^1.4.2",
+		"nodemon": "^2.0.7",
+		"papaparse": "^5.3.0"
+	}
 }

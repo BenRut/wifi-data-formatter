@@ -1,5 +1,8 @@
 import React, { Component } from 'react';
 import axios from 'axios';
+// const { createSingleFile, createMutipleFiles } = require('../write-files');
+import { createSingleFile, createMultipleFiles } from '../write-files';
+const csv = require('csvtojson');
 
 class Uploader extends Component {
 	state = {
@@ -7,6 +10,7 @@ class Uploader extends Component {
 		filePath: '',
 		wifiProvider: '',
 		file: null,
+		csvJsonArr: [],
 	};
 	onChange = (event) => {
 		this.setState({
@@ -14,17 +18,28 @@ class Uploader extends Component {
 			loaded: 0,
 		});
 	};
-	onSubmit = (event) => {
-		event.preventDefault();
-		this.uploadFile(this.state.file).then((response) => {
-			console.log(response.statusText);
-		});
+	convertCSVToJson = async (filePath) => {
+		const res = await axios.get(filePath);
+		const CSVString = res.data;
+		const jsonArr = await csv().fromString(CSVString);
+		return jsonArr;
 	};
 	uploadFile = (file) => {
 		const formData = new FormData();
 		formData.append('file', file);
 		return axios.post('http://localhost:8000/upload', formData, {});
 	};
+	onSubmit = async (event) => {
+		event.preventDefault();
+		const res = await this.uploadFile(this.state.file);
+		console.log(res.statusText);
+		const data = await this.convertCSVToJson(`./${this.state.file.name}`);
+		this.setState({
+			csvJsonArr: data,
+		});
+		createSingleFile(data);
+	};
+
 	render() {
 		return (
 			<div>
