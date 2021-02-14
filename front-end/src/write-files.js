@@ -66,7 +66,12 @@ const createSingleFile = (fileName, data) => {
 	});
 	const filteredByMonth = filterDataByMonth(formattedData);
 	const deDupedAndFilteredByMonth = removeDuplicateEmails(filteredByMonth);
-	handleSaveToPC(returnFileName(fileName), deDupedAndFilteredByMonth);
+	console.log(returnFileName(fileName.substring(0, fileName.length - 4)));
+
+	handleSaveToPC(
+		returnFileName(fileName.substring(0, fileName.length - 4)),
+		deDupedAndFilteredByMonth
+	);
 	// fs.writeFile(returnFileName(fileName), Papa.unparse(deDuped), (err) => {
 	// 	if (err) throw err;
 	// 	console.log(`${returnFileName(fileName)} saved!`);
