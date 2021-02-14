@@ -8,7 +8,7 @@ class Uploader extends Component {
 	state = {
 		dataInput: '',
 		filePath: '',
-		wifiProvider: '',
+		input: 'mutiple-files',
 		file: null,
 		csvJsonArr: [],
 	};
@@ -24,22 +24,29 @@ class Uploader extends Component {
 		const jsonArr = await csv().fromString(CSVString);
 		return jsonArr;
 	};
-	uploadFile = (file) => {
+	uploadFile = async (file) => {
 		const formData = new FormData();
 		formData.append('file', file);
-		return axios.post('http://localhost:8000/upload', formData, {});
+		return await axios.post('http://localhost:8000/upload', formData, {});
 	};
 	onSubmit = async (event) => {
 		event.preventDefault();
 		const res = await this.uploadFile(this.state.file);
+		console.log(res);
 		console.log(res.statusText);
-		const data = await this.convertCSVToJson(`./${this.state.file.name}`);
+		const data = await this.convertCSVToJson(`./${res.data.filename}`);
 		this.setState({
 			csvJsonArr: data,
 		});
-		createSingleFile(this.state.file.name, data);
+		if (this.state.input === 'single-file') {
+			createSingleFile(this.state.file.name, data);
+		} else if (this.state.input === 'mutiple-files') {
+			createMultipleFiles(this.state.file.name, data);
+		}
 	};
-
+	onSelect = (event) => {
+		this.setState({ input: event.target.value });
+	};
 	render() {
 		return (
 			<div>
@@ -53,7 +60,7 @@ class Uploader extends Component {
 						onChange={this.onChange}
 					/>
 					<label htmlFor="wifi-provider">Wifi provider:</label>
-					<select name="" id="wifi-provider">
+					<select name="" id="wifi-provider" onChange={this.onSelect}>
 						<option value="mutiple-files">BT(LIM)/BT(L&amp;G)</option>
 						<option value="single-file">Inkspot/Freerunner/BT(ASI)</option>
 					</select>
