@@ -37,7 +37,7 @@ class Uploader extends Component {
 		this.setState({
 			csvJsonArr: data,
 		});
-		createSingleFile(data);
+		createSingleFile(this.state.file.name, data);
 	};
 
 	render() {

@@ -19,9 +19,19 @@ const csv = require('csvtojson');
 // 	return data;
 // };
 
+const handleSaveToPC = (fileName, jsonArr) => {
+	const fileData = Papa.unparse(jsonArr);
+	const blob = new Blob([fileData], { type: 'csv' });
+	const url = URL.createObjectURL(blob);
+	const link = document.createElement('a');
+	link.download = `${fileName}`;
+	link.href = url;
+	link.click();
+};
+
 // LIM and L&G
 
-const createMultipleFiles = (data) => {
+const createMultipleFiles = (fileName, data) => {
 	// getData().then((data) => {
 	const formattedData = data.map((datum) => {
 		return formatDatum(datum);
@@ -49,14 +59,14 @@ const createMultipleFiles = (data) => {
 
 // Inkspot/Freerunner/ASI
 
-const createSingleFile = (data) => {
+const createSingleFile = (fileName, data) => {
 	// getData().then((data) => {
 	const formattedData = data.map((datum) => {
 		return formatDatum(datum);
 	});
 	const filteredByMonth = filterDataByMonth(formattedData);
 	const deDupedAndFilteredByMonth = removeDuplicateEmails(filteredByMonth);
-	console.log(deDupedAndFilteredByMonth);
+	handleSaveToPC(returnFileName(fileName), deDupedAndFilteredByMonth);
 	// fs.writeFile(returnFileName(fileName), Papa.unparse(deDuped), (err) => {
 	// 	if (err) throw err;
 	// 	console.log(`${returnFileName(fileName)} saved!`);
