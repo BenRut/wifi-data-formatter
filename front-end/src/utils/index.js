@@ -141,6 +141,7 @@ exports.removeDuplicateEmails = (data) => {
 };
 
 exports.filterDataByMonth = (data, month) => {
+	if (!data.length) return data;
 	if (!Object.keys(data[0]).includes('creationdate')) return data;
 	if (!month) {
 		const today = new Date();
@@ -169,4 +170,117 @@ exports.filterDataByMonth = (data, month) => {
 			return datum['creationdate'].slice(0, 10).split('-')[1] == month;
 		}
 	});
+};
+
+exports.arrayCompare = (_arr1, _arr2) => {
+	if (
+		!Array.isArray(_arr1) ||
+		!Array.isArray(_arr2) ||
+		_arr1.length !== _arr2.length
+	) {
+		return false;
+	}
+
+	// .concat() to not mutate arguments
+	const arr1 = _arr1.concat().sort();
+	const arr2 = _arr2.concat().sort();
+
+	for (let i = 0; i < arr1.length; i++) {
+		if (arr1[i] !== arr2[i]) {
+			return false;
+		}
+	}
+
+	return true;
+};
+
+exports.validateInputFormat = (object) => {
+	if (!object)
+		return {
+			isValid: false,
+			dataType: 'n/a',
+		};
+	if (
+		exports.arrayCompare(Object.keys(object), [
+			'Email',
+			'Estate Name',
+			'Federated Group Name',
+			'First Name',
+			'Last Name',
+			'Location Name',
+			'Marketing Consent',
+			'Postcode',
+			'Week Ending',
+		])
+	) {
+		return {
+			isValid: true,
+			dataType: '1',
+		};
+	} else if (
+		exports.arrayCompare(Object.keys(object), [
+			'Email Address',
+			'Title',
+			'Forename',
+			'Surname',
+			'Postcode',
+			'Mobile Number',
+			'Registration Location ID',
+			'Registration Location Name',
+			'Marketing Opt In',
+		])
+	) {
+		return {
+			isValid: true,
+			dataType: '2',
+		};
+	} else if (
+		exports.arrayCompare(Object.keys(object), [
+			'username',
+			'total_downloaded_bytes',
+			'total_uploaded_bytes',
+			'total_sessions',
+			'online_time_seconds',
+			'postcode',
+			'gender',
+			'agent_device',
+			'email',
+		])
+	) {
+		return {
+			isValid: true,
+			dataType: '1',
+		};
+	} else if (
+		exports.arrayCompare(Object.keys(object), [
+			'username',
+			'creationdate',
+			'firstname',
+			'lastname',
+			'postcode',
+			'opt_in',
+		])
+	) {
+		return {
+			isValid: true,
+			dataType: '1',
+		};
+	} else if (
+		exports.arrayCompare(Object.keys(object), [
+			'Email Address',
+			'Title',
+			'Forename',
+			'Surname',
+			'Postcode',
+			'Mobile Number',
+			'Registration Location ID',
+			'Registration Location Name',
+			'Marketing Opt In',
+		])
+	) {
+		return {
+			isValid: true,
+			dataType: '2',
+		};
+	}
 };

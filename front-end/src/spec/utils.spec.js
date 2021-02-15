@@ -10,6 +10,7 @@ const {
 	objectKeysToLowerCase,
 	filterDataByMonth,
 	removeDuplicateEmails,
+	validateInputFormat,
 } = require('../utils');
 const testData = [
 	{
@@ -775,5 +776,84 @@ describe('filterDataByMonth', () => {
 				opt_in: '1',
 			},
 		]);
+	});
+});
+
+describe('validateInputFormat', () => {
+	it('returns false when not passed a value', () => {
+		expect(validateInputFormat().isValid).to.equal(false);
+		expect(validateInputFormat().dataType).to.equal('n/a');
+	});
+	it('returns true when passed an ASI data object', () => {
+		const input = {
+			'Week Ending': '29/01/2021',
+			'Federated Group Name': 'ABERDEEN STANDARD INVESTMENTS THISTLES',
+			'Estate Name': 'ABERDEEN STANDARD INVESTMENTS THISTLES',
+			'Location Name': 'Aberdeen Standard Investments Thistles',
+			'First Name': 'John',
+			'Last Name': 'Doe',
+			Email: 'john.doe@gmail.com',
+			Postcode: 'ls284pz',
+			'Marketing Consent': 'Yes',
+		};
+		expect(validateInputFormat(input).isValid).to.equal(true);
+		expect(validateInputFormat(input).dataType).to.equal('1');
+	});
+	it('returns true when passed a Freerunner data object', () => {
+		const input = {
+			username: 'uhfgkjg@gmail.com',
+			creationdate: '2021-02-01 15:09:46',
+			firstname: 'Chris',
+			lastname: 'Morris',
+			postcode: 'Tu20 7TW',
+			opt_in: '1',
+		};
+		expect(validateInputFormat(input).isValid).to.equal(true);
+		expect(validateInputFormat(input).dataType).to.equal('1');
+	});
+	it('returns true when passed an Inkspot data object', () => {
+		const input = {
+			username: 'gjkbjkgjhkvgv',
+			total_downloaded_bytes: 876875687,
+			total_uploaded_bytes: 8987987,
+			total_sessions: 1,
+			online_time_seconds: 898,
+			postcode: 'ls1 9ag',
+			gender: 'M',
+			agent_device: 'iPhone',
+			email: 'joe.bloggs@gmail.com',
+		};
+		expect(validateInputFormat(input).isValid).to.equal(true);
+		expect(validateInputFormat(input).dataType).to.equal('1');
+	});
+	it('returns true when passed an L&G data object', () => {
+		const input = {
+			'Email Address': 'bootsy.collins@gmail.com',
+			Title: 'Mr',
+			Forename: 'Bootsy',
+			Surname: 'Collins',
+			Postcode: 'CM23 1FL',
+			'Mobile Number': '01219877583',
+			'Registration Location ID': 'JLLS-LGJAC-01',
+			'Registration Location Name': 'Jackson Square Shopping Centre',
+			'Marketing Opt In': 'Yes',
+		};
+		expect(validateInputFormat(input).isValid).to.equal(true);
+		expect(validateInputFormat(input).dataType).to.equal('2');
+	});
+	it('returns true when passed an LIM data object', () => {
+		const input = {
+			'Email Address': 'Mr',
+			Title: 'Mr',
+			Forename: 'Hiroshi',
+			Surname: 'Suzuki',
+			Postcode: 'JG2 0bn',
+			'Mobile Number': '01234567891',
+			'Registration Location ID': 'JLLS-LIMPY-01',
+			'Registration Location Name': 'JLLS - Lim Pyramids Centre',
+			'Marketing Opt In': 'Yes',
+		};
+		expect(validateInputFormat(input).isValid).to.equal(true);
+		expect(validateInputFormat(input).dataType).to.equal('2');
 	});
 });

@@ -24,7 +24,7 @@ class Uploader extends Component {
 		filesData: [],
 	};
 	onChange = (event) => {
-		console.log(event.target.files[0].name);
+		console.log(event.target.files[0]);
 		this.setState({
 			files: event.target.files,
 			// fileName: event.target.files[0].name,
