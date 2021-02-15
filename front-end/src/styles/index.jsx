@@ -72,8 +72,8 @@ const Button = styled.button`
 	max-width: 340px;
 	text-transform: uppercase;
 	overflow: hidden;
-
 	transition: all 0.2s;
+
 	&:hover {
 		background: #9164cc;
 		color: white;
@@ -82,7 +82,7 @@ const Button = styled.button`
 
 const Form = styled.form`
 	display: flex;
-	flex-direction: row;
+	flex-direction: column;
 `;
 
 const FileInput = styled.input`
@@ -122,6 +122,7 @@ const FileInputLabel = styled.label``;
 
 const Select = styled.select`
 	margin: 10px;
+	padding: 12px 20px 12px 20px;
 `;
 
 const FileName = styled.div`
@@ -143,6 +144,10 @@ const FileInputContainer = styled.div`
 	margin: 10px;
 `;
 
+const Title = styled.h1`
+	color: #9164cc;
+`;
+
 export {
 	Logo,
 	LogoWrapper,
@@ -156,4 +161,5 @@ export {
 	Select,
 	FileName,
 	FileInputContainer,
+	Title,
 };

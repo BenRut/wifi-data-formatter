@@ -2,7 +2,7 @@ import logo from './bw-logo-dark.svg';
 import asterix from './asterisk-purple.svg';
 import './App.css';
 import Uploader from './components/Uploader';
-import { Logo, LogoContainer, LogoWrapper } from './styles';
+import { Logo, LogoContainer, LogoWrapper, Title } from './styles';
 
 function App() {
 	return (
@@ -12,7 +12,7 @@ function App() {
 					<Logo src={logo} alt={'Bewonder'} />
 				</LogoWrapper>
 			</LogoContainer>
-			<h1>Wifi Data Formatter</h1>
+			<Title>Wifi Data Formatter</Title>
 
 			<Uploader />
 		</div>

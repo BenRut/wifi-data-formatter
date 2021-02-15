@@ -18,15 +18,16 @@ const csv = require('csvtojson');
 class Uploader extends Component {
 	state = {
 		dataInput: '',
-		fileName: '',
-		input: 'mutiple-files',
-		file: null,
-		csvJsonArr: [],
+		fileName: [],
+		output: 'not-selected',
+		files: null,
+		filesData: [],
 	};
 	onChange = (event) => {
+		console.log(event.target.files[0].name);
 		this.setState({
-			file: event.target.files[0],
-			fileName: event.target.files[0].name,
+			files: event.target.files,
+			// fileName: event.target.files[0].name,
 			loaded: 0,
 		});
 	};
@@ -43,23 +44,38 @@ class Uploader extends Component {
 	};
 	onSubmit = async (event) => {
 		event.preventDefault();
-		const res = await this.uploadFile(this.state.file);
-		console.log(res);
-		console.log(res.statusText);
-		const data = await this.convertCSVToJson(`./${res.data.filename}`);
-		this.setState({
-			csvJsonArr: data,
-		});
+		for (let i = 0; i < this.state.files.length; i++) {
+			const res = await this.uploadFile(this.state.files[i]);
+			console.log(res.statusText);
+			const datum = await this.convertCSVToJson(`./${res.data.filename}`);
+			this.setState((currentState) => {
+				return {
+					filesData: [datum, ...currentState.filesData],
+				};
+			});
+		}
+
 		if (this.state.output === 'not-selected') {
 			console.log('No Wi-Fi provider selected!');
-		} else if (this.state.input === 'single-file') {
-			createSingleFile(this.state.file.name, data);
-		} else if (this.state.input === 'mutiple-files') {
-			createMultipleFiles(this.state.file.name, data);
+		} else if (this.state.output === 'single-file') {
+			for (let i = 0; i < this.state.filesData.length; i++) {
+				console.log(this.state.files);
+				createSingleFile(this.state.files[i].name, this.state.filesData[i]);
+			}
+		} else if (this.state.output === 'mutiple-files') {
+			for (let i = 0; i < this.state.filesData.length; i++) {
+				createMultipleFiles(this.state.files[i].name, this.state.filesData[i]);
+			}
 		}
+		this.setState({
+			dataInput: '',
+			fileName: [],
+			files: null,
+			filesData: [],
+		});
 	};
 	onSelect = (event) => {
-		this.setState({ input: event.target.value });
+		this.setState({ output: event.target.value });
 	};
 	render() {
 		return (
@@ -72,11 +88,12 @@ class Uploader extends Component {
 								id="file"
 								name="file"
 								accept=".csv"
+								multiple
 								onChange={this.onChange}
 							/>
 							<FileInputLabel for="file">Select file</FileInputLabel>
 						</FileInputWrapper>
-						<FileName>{this.state.fileName}</FileName>
+						{/* <FileName>{this.state.fileName}</FileName> */}
 					</FileInputContainer>
 
 					<Select name="" id="wifi-provider" onChange={this.onSelect}>
