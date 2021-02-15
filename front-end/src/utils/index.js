@@ -282,5 +282,7 @@ exports.validateInputFormat = (object) => {
 			isValid: true,
 			dataType: '2',
 		};
+	} else {
+		return { isValid: false, dataType: 'unrecognised' };
 	}
 };

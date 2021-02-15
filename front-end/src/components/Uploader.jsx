@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import axios from 'axios';
 // const { createSingleFile, createMutipleFiles } = require('../write-files');
+import { validateInputFormat } from '../utils';
 import { createSingleFile, createMultipleFiles } from '../write-files';
 import {
 	Button,
@@ -20,11 +21,10 @@ class Uploader extends Component {
 		dataInput: '',
 		fileName: [],
 		output: 'not-selected',
-		files: null,
+		files: [],
 		filesData: [],
 	};
 	onChange = (event) => {
-		console.log(event.target.files[0]);
 		this.setState({
 			files: event.target.files,
 			// fileName: event.target.files[0].name,
@@ -54,12 +54,28 @@ class Uploader extends Component {
 				};
 			});
 		}
-
-		if (this.state.output === 'not-selected') {
+		if (this.state.filesData.length === 0) {
+			console.log('No file to convert');
+		} else if (
+			validateInputFormat(this.state.filesData[0][0]).isValid === false &&
+			validateInputFormat(this.state.filesData[0][0]).dataType ===
+				'unrecognised'
+		) {
+			console.log('INVALID FILE: Data in unrecognised format');
+		} else if (
+			validateInputFormat(this.state.filesData[0][0]).dataType === '1' &&
+			this.state.output === 'mutiple-files'
+		) {
+			console.log('INVALID FILE: Wrong provider selected');
+		} else if (
+			validateInputFormat(this.state.filesData[0][0]).dataType === '2' &&
+			this.state.output === 'single-file'
+		) {
+			console.log('INVALID FILE: Wrong Provider Selected');
+		} else if (this.state.output === 'not-selected') {
 			console.log('No Wi-Fi provider selected!');
 		} else if (this.state.output === 'single-file') {
 			for (let i = 0; i < this.state.filesData.length; i++) {
-				console.log(this.state.files);
 				createSingleFile(this.state.files[i].name, this.state.filesData[i]);
 			}
 		} else if (this.state.output === 'mutiple-files') {
@@ -70,7 +86,7 @@ class Uploader extends Component {
 		this.setState({
 			dataInput: '',
 			fileName: [],
-			files: null,
+			files: [],
 			filesData: [],
 		});
 	};
