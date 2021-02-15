@@ -2,12 +2,23 @@ import React, { Component } from 'react';
 import axios from 'axios';
 // const { createSingleFile, createMutipleFiles } = require('../write-files');
 import { createSingleFile, createMultipleFiles } from '../write-files';
+import {
+	Button,
+	Form,
+	FileInput,
+	FileInputWrapper,
+	FileInputLabel,
+	UploaderContainer,
+	Select,
+	FileName,
+	FileInputContainer,
+} from '../styles';
 const csv = require('csvtojson');
 
 class Uploader extends Component {
 	state = {
 		dataInput: '',
-		filePath: '',
+		fileName: '',
 		input: 'mutiple-files',
 		file: null,
 		csvJsonArr: [],
@@ -15,6 +26,7 @@ class Uploader extends Component {
 	onChange = (event) => {
 		this.setState({
 			file: event.target.files[0],
+			fileName: event.target.files[0].name,
 			loaded: 0,
 		});
 	};
@@ -38,7 +50,9 @@ class Uploader extends Component {
 		this.setState({
 			csvJsonArr: data,
 		});
-		if (this.state.input === 'single-file') {
+		if (this.state.output === 'not-selected') {
+			console.log('No Wi-Fi provider selected!');
+		} else if (this.state.input === 'single-file') {
 			createSingleFile(this.state.file.name, data);
 		} else if (this.state.input === 'mutiple-files') {
 			createMultipleFiles(this.state.file.name, data);
@@ -49,24 +63,32 @@ class Uploader extends Component {
 	};
 	render() {
 		return (
-			<div>
-				<form onSubmit={this.onSubmit} action="">
-					<label htmlFor="file">Upload file:</label>
-					<input
-						type="file"
-						id="file"
-						name="file"
-						accept=".csv"
-						onChange={this.onChange}
-					/>
-					<label htmlFor="wifi-provider">Wifi provider:</label>
-					<select name="" id="wifi-provider" onChange={this.onSelect}>
+			<UploaderContainer>
+				<Form onSubmit={this.onSubmit} action="">
+					<FileInputContainer>
+						<FileInputWrapper>
+							<FileInput
+								type="file"
+								id="file"
+								name="file"
+								accept=".csv"
+								onChange={this.onChange}
+							/>
+							<FileInputLabel for="file">Select file</FileInputLabel>
+						</FileInputWrapper>
+						<FileName>{this.state.fileName}</FileName>
+					</FileInputContainer>
+
+					<Select name="" id="wifi-provider" onChange={this.onSelect}>
+						<option value="not-selected">Select Wi-Fi provider</option>
 						<option value="mutiple-files">BT(LIM)/BT(L&amp;G)</option>
 						<option value="single-file">Inkspot/Freerunner/BT(ASI)</option>
-					</select>
-					<button type="submit">Format</button>
-				</form>
-			</div>
+					</Select>
+					<Button type="submit">
+						<span>Format</span>
+					</Button>
+				</Form>
+			</UploaderContainer>
 		);
 	}
 }
