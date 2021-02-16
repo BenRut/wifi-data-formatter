@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import axios from 'axios';
-// const { createSingleFile, createMutipleFiles } = require('../write-files');
 import { validateInputFormat } from '../utils';
 import { createSingleFile, createMultipleFiles } from '../write-files';
 import {
@@ -19,7 +18,7 @@ const csv = require('csvtojson');
 class Uploader extends Component {
 	state = {
 		fileNames: [],
-		output: 'not-selected',
+		output: '0',
 		files: [],
 		filesData: [],
 		errorMessage: '',
@@ -32,7 +31,7 @@ class Uploader extends Component {
 		this.setState({
 			files: event.target.files,
 			fileNames,
-			loaded: 0,
+			errorMessage: '',
 		});
 	};
 	convertCSVToJson = async (filePath) => {
@@ -46,9 +45,46 @@ class Uploader extends Component {
 		formData.append('file', file);
 		return await axios.post('http://localhost:8000/upload', formData, {});
 	};
-	// isInputValid = () => {
-	// 	for (let i = 0; i < )
-	// }
+	isInputValid = async () => {
+		let count = 0;
+		if (this.state.filesData.length === 0) {
+			this.setState({
+				errorMessage: 'No file to convert',
+			});
+			return false;
+		}
+		if (this.state.output === '0') {
+			this.setState({
+				errorMessage: 'No Wi-Fi provider selected!',
+			});
+			return false;
+		}
+		for (let i = 0; i < this.state.filesData.length; i++) {
+			count++;
+			if (
+				validateInputFormat(this.state.filesData[i][0]).dataType ===
+				'unrecognised'
+			) {
+				this.setState({
+					errorMessage: 'INVALID FILE: Data in unrecognised format',
+				});
+				return false;
+			} else if (
+				validateInputFormat(this.state.filesData[i][0]).dataType !==
+				this.state.output
+			) {
+				this.setState({
+					errorMessage: 'INVALID FILE: Wrong provider selected',
+				});
+				return false;
+			} else if (count === this.state.filesData.length) {
+				this.setState({
+					errorMessage: '',
+				});
+				return true;
+			}
+		}
+	};
 	onSubmit = async (event) => {
 		event.preventDefault();
 		const filesData = [];
@@ -61,42 +97,14 @@ class Uploader extends Component {
 		this.setState({
 			filesData,
 		});
-		if (this.state.filesData.length === 0) {
-			this.setState({
-				errorMessage: 'No file to convert',
-			});
-		} else if (
-			validateInputFormat(this.state.filesData[0][0]).isValid === false &&
-			validateInputFormat(this.state.filesData[0][0]).dataType ===
-				'unrecognised'
-		) {
-			this.setState({
-				errorMessage: 'INVALID FILE: Data in unrecognised format',
-			});
-		} else if (
-			validateInputFormat(this.state.filesData[0][0]).dataType === '1' &&
-			this.state.output === 'mutiple-files'
-		) {
-			this.setState({
-				errorMessage: 'INVALID FILE: Wrong provider selected',
-			});
-		} else if (
-			validateInputFormat(this.state.filesData[0][0]).dataType === '2' &&
-			this.state.output === 'single-file'
-		) {
-			this.setState({
-				errorMessage: 'INVALID FILE: Wrong Provider Selected',
-			});
-		} else if (this.state.output === 'not-selected') {
-			this.setState({
-				errorMessage: 'No Wi-Fi provider selected!',
-			});
-		} else if (this.state.output === 'single-file') {
+		const validatedInput = await this.isInputValid();
+
+		if (validatedInput === true && this.state.output === '1') {
 			for (let i = 0; i < this.state.fileNames.length; i++) {
 				console.log(this.state.fileNames[i]);
 				createSingleFile(this.state.fileNames[i], this.state.filesData[i]);
 			}
-		} else if (this.state.output === 'mutiple-files') {
+		} else if (validatedInput === true && this.state.output === '2') {
 			for (let i = 0; i < this.state.fileNames.length; i++) {
 				createMultipleFiles(this.state.fileNames[i], this.state.filesData[i]);
 			}
@@ -132,9 +140,9 @@ class Uploader extends Component {
 						id="wifi-provider"
 						onChange={this.onSelect}
 					>
-						<option value="not-selected">Select Wi-Fi provider</option>
-						<option value="mutiple-files">BT(LIM)/BT(L&amp;G)</option>
-						<option value="single-file">Inkspot/Freerunner/BT(ASI)</option>
+						<option value="0">Select Wi-Fi provider</option>
+						<option value="1">Inkspot/Freerunner/BT(ASI)</option>
+						<option value="2">BT(LIM)/BT(L&amp;G)</option>
 					</Select>
 					<Button type="submit">
 						<span>Format</span>
