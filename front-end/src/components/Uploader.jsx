@@ -22,6 +22,7 @@ class Uploader extends Component {
 		output: 'not-selected',
 		files: [],
 		filesData: [],
+		errorMessage: '',
 	};
 	onChange = (event) => {
 		const fileNames = [];
@@ -45,6 +46,9 @@ class Uploader extends Component {
 		formData.append('file', file);
 		return await axios.post('http://localhost:8000/upload', formData, {});
 	};
+	// isInputValid = () => {
+	// 	for (let i = 0; i < )
+	// }
 	onSubmit = async (event) => {
 		event.preventDefault();
 		const filesData = [];
@@ -58,25 +62,35 @@ class Uploader extends Component {
 			filesData,
 		});
 		if (this.state.filesData.length === 0) {
-			console.log('No file to convert');
+			this.setState({
+				errorMessage: 'No file to convert',
+			});
 		} else if (
 			validateInputFormat(this.state.filesData[0][0]).isValid === false &&
 			validateInputFormat(this.state.filesData[0][0]).dataType ===
 				'unrecognised'
 		) {
-			console.log('INVALID FILE: Data in unrecognised format');
+			this.setState({
+				errorMessage: 'INVALID FILE: Data in unrecognised format',
+			});
 		} else if (
 			validateInputFormat(this.state.filesData[0][0]).dataType === '1' &&
 			this.state.output === 'mutiple-files'
 		) {
-			console.log('INVALID FILE: Wrong provider selected');
+			this.setState({
+				errorMessage: 'INVALID FILE: Wrong provider selected',
+			});
 		} else if (
 			validateInputFormat(this.state.filesData[0][0]).dataType === '2' &&
 			this.state.output === 'single-file'
 		) {
-			console.log('INVALID FILE: Wrong Provider Selected');
+			this.setState({
+				errorMessage: 'INVALID FILE: Wrong Provider Selected',
+			});
 		} else if (this.state.output === 'not-selected') {
-			console.log('No Wi-Fi provider selected!');
+			this.setState({
+				errorMessage: 'No Wi-Fi provider selected!',
+			});
 		} else if (this.state.output === 'single-file') {
 			for (let i = 0; i < this.state.fileNames.length; i++) {
 				console.log(this.state.fileNames[i]);
@@ -107,7 +121,9 @@ class Uploader extends Component {
 							/>
 							<FileInputLabel for="file">Select file</FileInputLabel>
 						</FileInputWrapper>
-						{/* <FileName>{this.state.fileName}</FileName> */}
+						{this.state.fileNames.map((fileName) => {
+							return <p>{fileName}</p>;
+						})}
 					</FileInputContainer>
 
 					<Select
@@ -123,6 +139,9 @@ class Uploader extends Component {
 					<Button type="submit">
 						<span>Format</span>
 					</Button>
+					{this.state.errorMessage !== '' && (
+						<div>{this.state.errorMessage}</div>
+					)}
 				</Form>
 			</UploaderContainer>
 		);
