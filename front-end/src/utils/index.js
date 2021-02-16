@@ -132,7 +132,7 @@ exports.removeDuplicateEmails = (data) => {
 	}
 	const loggedEmails = [];
 	return data.reduce((deDupedArray, datum) => {
-		if (!loggedEmails.includes(datum[emailKey])) {
+		if (!loggedEmails.includes(datum[emailKey]) && datum[emailKey] !== '') {
 			loggedEmails.push(datum[emailKey]);
 			deDupedArray.push(datum);
 		}
