@@ -1,20 +1,27 @@
 import logo from './bw-logo-dark.svg';
-import asterix from './asterisk-purple.svg';
 import './App.css';
 import Uploader from './components/Uploader';
-import { Logo, LogoContainer, LogoWrapper, Title } from './styles';
+import {
+	Logo,
+	LogoContainer,
+	LogoWrapper,
+	Title,
+	AppContainer,
+} from './styles';
 
 function App() {
 	return (
-		<div className="App">
+		<div>
 			<LogoContainer>
 				<LogoWrapper>
 					<Logo src={logo} alt={'Bewonder'} />
 				</LogoWrapper>
 			</LogoContainer>
-			<Title>Wifi Data Formatter</Title>
+			<AppContainer className="App">
+				<Title>Wifi Data Formatter</Title>
 
-			<Uploader />
+				<Uploader />
+			</AppContainer>
 		</div>
 	);
 }

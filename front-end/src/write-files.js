@@ -7,16 +7,6 @@ const {
 } = require('./utils');
 const Papa = require('papaparse');
 
-// const csv = require('csvtojson');
-// const fileName = `test-file-freerunner`;
-// const filePath = `../public/${fileName}.csv`;
-// const fs = require('fs');
-
-// const getData = async () => {
-// 	const data = await csv().fromFile(filePath);
-// 	return data;
-// };
-
 const handleSaveToPC = (fileName, jsonArr) => {
 	const fileData = Papa.unparse(jsonArr);
 	const blob = new Blob([fileData], { type: 'csv' });
@@ -30,7 +20,6 @@ const handleSaveToPC = (fileName, jsonArr) => {
 // LIM and L&G
 
 const createMultipleFiles = (fileName, data) => {
-	// getData().then((data) => {
 	const formattedData = data.map((datum) => {
 		return formatDatum(datum);
 	});
@@ -41,20 +30,7 @@ const createMultipleFiles = (fileName, data) => {
 		fileName = returnFileName(centres[i]);
 
 		handleSaveToPC(fileName, deDupedAndFilteredByMonth);
-		// fs.writeFile(
-		// 	fileName,
-		// 	Papa.unparse(
-		// 		deDuped.filter((datum) => {
-		// 			return datum['Registration Location Name'] === centres[i];
-		// 		})
-		// 	),
-		// 	(err) => {
-		// 		if (err) throw err;
-		// 		console.log(`${fileName} saved!`);
-		// 	}
-		// );
 	}
-	// });
 };
 
 // Inkspot/Freerunner/ASI

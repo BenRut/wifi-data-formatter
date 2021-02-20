@@ -10,8 +10,14 @@ import {
 	FileInputLabel,
 	UploaderContainer,
 	Select,
-	FileName,
 	FileInputContainer,
+	ErrorMessage,
+	UploaderHeader,
+	UploaderFooter,
+	FileList,
+	FileCard,
+	Thumbnail,
+	FileListContainer,
 } from '../styles';
 const csv = require('csvtojson');
 
@@ -91,7 +97,9 @@ class Uploader extends Component {
 		for (let i = 0; i < this.state.files.length; i++) {
 			const res = await this.uploadFile(this.state.files[i]);
 			console.log(res.statusText);
-			const datum = await this.convertCSVToJson(`./${res.data.filename}`);
+			const datum = await this.convertCSVToJson(
+				`./uploads/${res.data.filename}`
+			);
 			filesData.push(datum);
 		}
 		this.setState({
@@ -117,40 +125,53 @@ class Uploader extends Component {
 		return (
 			<UploaderContainer>
 				<Form onSubmit={this.onSubmit} action="">
-					<FileInputContainer>
-						<FileInputWrapper>
-							<FileInput
-								type="file"
-								id="file"
-								name="file"
-								accept=".csv"
-								multiple
-								onChange={this.onChange}
-							/>
-							<FileInputLabel for="file">Select file</FileInputLabel>
-						</FileInputWrapper>
-						{this.state.fileNames.map((fileName) => {
-							return <p>{fileName}</p>;
-						})}
-					</FileInputContainer>
-
-					<Select
-						value={this.state.output}
-						name=""
-						id="wifi-provider"
-						onChange={this.onSelect}
-					>
-						<option value="0">Select Wi-Fi provider</option>
-						<option value="1">Inkspot/Freerunner/BT(ASI)</option>
-						<option value="2">BT(LIM)/BT(L&amp;G)</option>
-					</Select>
-					<Button type="submit">
-						<span>Format</span>
-					</Button>
-					{this.state.errorMessage !== '' && (
-						<div>{this.state.errorMessage}</div>
-					)}
+					<UploaderHeader>
+						<FileInputContainer>
+							<FileInputWrapper>
+								<FileInput
+									type="file"
+									id="file"
+									name="file"
+									accept=".csv"
+									multiple
+									onChange={this.onChange}
+								/>
+								<FileInputLabel for="file">Select file(s)</FileInputLabel>
+							</FileInputWrapper>
+						</FileInputContainer>
+						<Select
+							value={this.state.output}
+							name=""
+							id="wifi-provider"
+							onChange={this.onSelect}
+						>
+							<option value="0">Select Wi-Fi provider</option>
+							<option value="1">Inkspot/Freerunner/BT(ASI)</option>
+							<option value="2">BT(LIM)/BT(L&amp;G)</option>
+						</Select>
+						<Button type="submit">
+							<span>Format</span>
+						</Button>
+					</UploaderHeader>
 				</Form>
+				<FileListContainer>
+					<FileList>
+						{this.state.fileNames.map((fileName) => {
+							return (
+								<FileCard>
+									<Thumbnail>.CSV</Thumbnail>
+									{fileName}
+								</FileCard>
+							);
+						})}
+					</FileList>
+				</FileListContainer>
+
+				<UploaderFooter>
+					{this.state.errorMessage !== '' && (
+						<ErrorMessage>{this.state.errorMessage}</ErrorMessage>
+					)}
+				</UploaderFooter>
 			</UploaderContainer>
 		);
 	}

@@ -1,6 +1,14 @@
 import styled, { keyframes } from 'styled-components';
 import asterisk from '../asterisk-purple.svg';
 
+const AppContainer = styled.div`
+	position: relative;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	flex-direction: column;
+`;
+
 const Logo = styled.img`
 	display: block;
 	width: 146px;
@@ -59,16 +67,15 @@ const ButtonText = styled.span`
 
 const Button = styled.button`
 	margin: 10px;
-	display: block;
 	background: none;
+	display: block;
+	border-radius: 30px;
 	border: solid 2px #9164cc;
 	font-size: 14px;
 	letter-spacing: 1.4px;
 	padding: 12px 20px 12px 20px;
+	max-height: 50px;
 	color: #9164cc;
-	width: -webkit-max-content;
-	width: -moz-max-content;
-	width: max-content;
 	max-width: 340px;
 	text-transform: uppercase;
 	overflow: hidden;
@@ -76,13 +83,13 @@ const Button = styled.button`
 
 	&:hover {
 		background: #9164cc;
-		color: white;
+		color: #fff;
 	}
 `;
 
 const Form = styled.form`
 	display: flex;
-	flex-direction: column;
+	flex-direction: row;
 `;
 
 const FileInput = styled.input`
@@ -94,33 +101,63 @@ const FileInput = styled.input`
 
 const FileInputWrapper = styled.div`
 	display: block;
+	border-radius: 30px;
 	background: none;
 	border: solid 2px #9164cc;
 	font-size: 14px;
 	letter-spacing: 1.4px;
 	padding: 12px 20px 12px 20px;
 	color: #9164cc;
-	width: -webkit-max-content;
-	width: -moz-max-content;
-	width: max-content;
-	max-width: 340px;
 	text-transform: uppercase;
-	overflow: hidden;
+
 	transition: all 0.2s;
 	&:hover {
 		background: #9164cc;
-		color: white;
+		color: #fff;
 	}
 `;
 
 const UploaderContainer = styled.div`
+	box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
+	-webkit-box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
+	-moz-box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
+	border-radius: 20px;
+	height: 400px;
+	width: 600px;
+	margin: 25px;
+	display: flex;
+	flex-direction: column;
+`;
+
+const UploaderHeader = styled.div`
+	border-radius: 20px 20px 0 0;
+	width: 100%;
+	height: 100px;
+	background: #fff;
+	align-self: flex-start;
 	display: flex;
 	justify-content: center;
+	align-items: center;
+`;
+
+const UploaderFooter = styled.div`
+	box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.88);
+	position: absolute;
+	bottom: 0;
+	border-radius: 0 0 20px 20px;
+	width: 600px;
+	height: 100px;
+	background: #9164cc;
+	align-self: flex-end;
+	display: flex;
+	justify-content: center;
+	align-items: center;
 `;
 
 const FileInputLabel = styled.label``;
 
 const Select = styled.select`
+	height: 50px;
 	margin: 10px;
 	padding: 12px 20px 12px 20px;
 `;
@@ -141,11 +178,90 @@ const FileName = styled.div`
 
 const FileInputContainer = styled.div`
 	display: flex;
+	flex-direction: column;
 	margin: 10px;
 `;
 
 const Title = styled.h1`
 	color: #9164cc;
+`;
+
+const ErrorMessage = styled.div`
+	min-width: 500px;
+	max-width: 500px;
+	font-style: italic;
+	color: #fff;
+	font-weight: 700;
+`;
+
+const FileList = styled.div`
+	width: 100%;
+	height: 225px;
+	overflow-y: scroll;
+	/* position: relative; */
+	&:before {
+		top: 0;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0), rgba(0, 0, 0, 0.1));
+		content: '';
+		width: 100%;
+		height: 8px;
+		position: absolute;
+		left: 0;
+	}
+	&:after {
+		bottom: 0;
+		background: linear-gradient(to top, rgba(0, 0, 0, 0.1), rgba(0, 0, 0, 0));
+		content: '';
+		width: 100%;
+		height: 8px;
+		position: absolute;
+		left: 0;
+	}
+`;
+
+const FileListContainer = styled.div`
+	/* width: 100%;
+	height: 225px; */
+	position: relative;
+	/* &:before {
+		content: '';
+		width: 600px;
+		height: 225px;
+		top: 0;
+		left: 0;
+		position: absolute;
+		z-index: 10;
+		-moz-box-shadow: inset 0 8px 8px -8px #696868, inset 0 -8px 8px -8px #696868;
+		-webkit-box-shadow: inset 0 8px 8px -8px #696868,
+			inset 0 -8px 8px -8px #696868;
+		box-shadow: inset 0 8px 8px -8px #696868, inset 0 -8px 8px -8px #696868;
+	} */
+`;
+
+const FileCard = styled.div`
+	height: 100px;
+	width: 100%;
+	border-top: solid 1px #dddddd;
+	border-bottom: solid 1px #dddddd;
+	display: flex;
+	align-items: center;
+`;
+
+const Thumbnail = styled.div`
+	background: #ddd;
+	color: white;
+	height: 70px;
+	width: 70px;
+	font-weight: 700;
+	font-size: 25px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	margin: 0 30px 0 15px;
+`;
+
+const Shadow = styled.div`
+	position: absolute;
 `;
 
 export {
@@ -162,4 +278,12 @@ export {
 	FileName,
 	FileInputContainer,
 	Title,
+	ErrorMessage,
+	AppContainer,
+	UploaderHeader,
+	UploaderFooter,
+	FileList,
+	FileCard,
+	Thumbnail,
+	FileListContainer,
 };
