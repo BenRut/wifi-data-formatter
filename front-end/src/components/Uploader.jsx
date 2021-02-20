@@ -28,6 +28,7 @@ class Uploader extends Component {
 		files: [],
 		filesData: [],
 		errorMessage: '',
+		uploadedFileNames: [],
 	};
 	onChange = (event) => {
 		const fileNames = [];
@@ -50,6 +51,9 @@ class Uploader extends Component {
 		const formData = new FormData();
 		formData.append('file', file);
 		return await axios.post('http://localhost:8000/upload', formData, {});
+	};
+	deleteFile = async (fileName) => {
+		const res = await axios.delete(`http://localhost:8000/${fileName}`);
 	};
 	isInputValid = async () => {
 		let count = 0;
@@ -94,9 +98,11 @@ class Uploader extends Component {
 	onSubmit = async (event) => {
 		event.preventDefault();
 		const filesData = [];
+		const uploadedFileNames = [];
 		for (let i = 0; i < this.state.files.length; i++) {
 			const res = await this.uploadFile(this.state.files[i]);
 			console.log(res.statusText);
+			uploadedFileNames.push(res.data.filename);
 			const datum = await this.convertCSVToJson(
 				`./uploads/${res.data.filename}`
 			);
@@ -104,17 +110,19 @@ class Uploader extends Component {
 		}
 		this.setState({
 			filesData,
+			uploadedFileNames,
 		});
 		const validatedInput = await this.isInputValid();
 
 		if (validatedInput === true && this.state.output === '1') {
 			for (let i = 0; i < this.state.fileNames.length; i++) {
-				console.log(this.state.fileNames[i]);
 				createSingleFile(this.state.fileNames[i], this.state.filesData[i]);
+				this.deleteFile(this.state.uploadedFileNames[i]);
 			}
 		} else if (validatedInput === true && this.state.output === '2') {
 			for (let i = 0; i < this.state.fileNames.length; i++) {
 				createMultipleFiles(this.state.fileNames[i], this.state.filesData[i]);
+				this.deleteFile(this.state.uploadedFileNames[i]);
 			}
 		}
 	};
