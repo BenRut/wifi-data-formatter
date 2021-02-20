@@ -1,5 +1,6 @@
 const {
 	getCentres,
+	getDataByCentre,
 	returnFileName,
 	formatDatum,
 	filterDataByMonth,
@@ -28,8 +29,11 @@ const createMultipleFiles = (fileName, data) => {
 	const centres = getCentres(data);
 	for (let i = 0; i < centres.length; i++) {
 		fileName = returnFileName(centres[i]);
-
-		handleSaveToPC(fileName, deDupedAndFilteredByMonth);
+		const filteredByCentre = getDataByCentre(
+			deDupedAndFilteredByMonth,
+			centres[i]
+		);
+		handleSaveToPC(fileName, filteredByCentre);
 	}
 };
 

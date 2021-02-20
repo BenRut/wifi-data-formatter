@@ -49,7 +49,7 @@ exports.returnExpiryDate = (date) => {
 
 exports.getDataByCentre = (data, centre) => {
 	return data.filter((datum) => {
-		return datum['Registration Location Name'] === centre;
+		return datum['registration location name'] === centre;
 	});
 };
 
@@ -285,4 +285,8 @@ exports.validateInputFormat = (object) => {
 	} else {
 		return { isValid: false, dataType: 'unrecognised' };
 	}
+};
+
+exports.sortDataIntoFiles = (data) => {
+	return data;
 };

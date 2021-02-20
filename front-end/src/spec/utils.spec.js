@@ -11,6 +11,7 @@ const {
 	filterDataByMonth,
 	removeDuplicateEmails,
 	validateInputFormat,
+	sortDataIntoFiles,
 } = require('../utils');
 const testData = [
 	{
@@ -223,6 +224,92 @@ describe('returnsExpiryDate()', () => {
 });
 
 describe('getDataByCentre()', () => {
+	const testData = [
+		{
+			'Email Address': '588@gmail.com',
+			Title: 'Mr',
+			Forename: 'Nile',
+			Surname: 'Rogers',
+			Postcode: 'MI44 1JZ',
+			'Mobile Number': '01219877583',
+			'Registration Location ID': 'JLLS-LGGRO-01',
+			'registration location name': 'JLLS  Grosvenor Centre Shopping',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+		{
+			'Email Address': '188@hotmail.com',
+			Title: 'Ms',
+			Forename: 'Alicia',
+			Surname: 'Keys',
+			Postcode: 'CM6 1XF',
+			'Mobile Number': '01219877583',
+			'Registration Location ID': 'JLLS-LGJAC-01',
+			'registration location name': 'Jackson Square Shopping Centre',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+		{
+			'Email Address': '133@outlook.com',
+			Title: 'Ms',
+			Forename: 'Gladys',
+			Surname: 'Knight',
+			Postcode: 'BN22 9PA',
+			'Mobile Number': '01219877583',
+			'Registration Location ID': 'JLLS-LGEAS-01',
+			'registration location name': 'Eastbourne Beacon Shopping Centre',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+		{
+			'Email Address': 'jhij@gmail.com',
+			Title: 'Mr',
+			Forename: 'R',
+			Surname: 'Kelly',
+			Postcode: 'CB23 8TL',
+			'Mobile Number': 'NOT CAPTURED',
+			'Registration Location ID': 'JLLS-LGGRA-01',
+			'registration location name': 'JLL Grafton',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+		{
+			'Email Address': '8365@gmail.com',
+			Title: 'Mr',
+			Forename: 'Bootsy',
+			Surname: 'Collins',
+			Postcode: 'CM23 1FL',
+			'Mobile Number': '01219877583',
+			'Registration Location ID': 'JLLS-LGJAC-01',
+			'registration location name': 'Jackson Square Shopping Centre',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+		{
+			'Email Address': '856@outlook.com',
+			Title: 'Mr',
+			Forename: 'Rick',
+			Surname: 'James',
+			Postcode: 'BN22 8JT',
+			'Mobile Number': 'NOT CAPTURED',
+			'Registration Location ID': 'JLLS-LGEAS-01',
+			'registration location name': 'Eastbourne Beacon Shopping Centre',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+		{
+			'Email Address': 'c846@gmail.com',
+			Title: 'Mr',
+			Forename: 'James',
+			Surname: 'Brown',
+			Postcode: 'CM23 3WD',
+			'Mobile Number': '01219877583',
+			'Registration Location ID': 'JLLS-LGJAC-01',
+			'registration location name': 'Jackson Square Shopping Centre',
+			'Marketing Opt In': 'Yes',
+			'Expiry Date': '8/2/2024',
+		},
+	];
 	it('returns [] when passed []', () => {
 		expect(getDataByCentre([])).to.eql([]);
 	});
@@ -236,7 +323,7 @@ describe('getDataByCentre()', () => {
 				Postcode: 'CM6 1XF',
 				'Mobile Number': '01219877583',
 				'Registration Location ID': 'JLLS-LGJAC-01',
-				'Registration Location Name': 'Jackson Square Shopping Centre',
+				'registration location name': 'Jackson Square Shopping Centre',
 				'Marketing Opt In': 'Yes',
 				'Expiry Date': '8/2/2024',
 			},
@@ -248,7 +335,7 @@ describe('getDataByCentre()', () => {
 				Postcode: 'CM23 1FL',
 				'Mobile Number': '01219877583',
 				'Registration Location ID': 'JLLS-LGJAC-01',
-				'Registration Location Name': 'Jackson Square Shopping Centre',
+				'registration location name': 'Jackson Square Shopping Centre',
 				'Marketing Opt In': 'Yes',
 				'Expiry Date': '8/2/2024',
 			},
@@ -260,7 +347,7 @@ describe('getDataByCentre()', () => {
 				Postcode: 'CM23 3WD',
 				'Mobile Number': '01219877583',
 				'Registration Location ID': 'JLLS-LGJAC-01',
-				'Registration Location Name': 'Jackson Square Shopping Centre',
+				'registration location name': 'Jackson Square Shopping Centre',
 				'Marketing Opt In': 'Yes',
 				'Expiry Date': '8/2/2024',
 			},
@@ -855,5 +942,11 @@ describe('validateInputFormat', () => {
 		};
 		expect(validateInputFormat(input).isValid).to.equal(true);
 		expect(validateInputFormat(input).dataType).to.equal('2');
+	});
+});
+
+describe('sortDataIntoFiles', () => {
+	it('returns an emtpy array when passed an array', () => {
+		expect(sortDataIntoFiles([])).to.eql([]);
 	});
 });
