@@ -288,5 +288,24 @@ exports.validateInputFormat = (object) => {
 };
 
 exports.sortDataIntoFiles = (data) => {
-	return data;
+	if (data.length === 0) return data;
+
+	const files = [];
+
+	const flattenedArr = data.reduce((acc, item) => {
+		return acc.concat(item);
+	}, []);
+
+	const centres = exports.getCentres(flattenedArr);
+	flattenedArr.forEach((item) => {
+		centres.forEach((centre, i) => {
+			if (item['Registration Location Name'] === centre && !files[i]) {
+				files[i] = [];
+				files[i].push(item);
+			} else if (item['Registration Location Name'] === centre) {
+				files[i].push(item);
+			}
+		});
+	});
+	return files;
 };

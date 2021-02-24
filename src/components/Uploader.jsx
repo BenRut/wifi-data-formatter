@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
-import axios from 'axios';
-import { validateInputFormat } from '../utils';
+import { validateInputFormat, sortDataIntoFiles } from '../utils';
 import { createSingleFile, createMultipleFiles } from '../write-files';
 import {
 	Button,
@@ -32,28 +31,26 @@ class Uploader extends Component {
 	};
 	onChange = (event) => {
 		const fileNames = [];
+		const filesData = [];
 		for (let i = 0; i < event.target.files.length; i++) {
 			fileNames.push(event.target.files[i].name);
+			const reader = new FileReader();
+			reader.readAsText(event.target.files[i]);
+			reader.onload = async (e) => {
+				const fileData = await this.convertCSVToJson(reader.result);
+				filesData.push(fileData);
+			};
 		}
 		this.setState({
 			files: event.target.files,
 			fileNames,
 			errorMessage: '',
+			filesData,
 		});
 	};
-	convertCSVToJson = async (filePath) => {
-		const res = await axios.get(filePath);
-		const CSVString = res.data;
-		const jsonArr = await csv().fromString(CSVString);
+	convertCSVToJson = async (str) => {
+		const jsonArr = await csv().fromString(str);
 		return jsonArr;
-	};
-	uploadFile = async (file) => {
-		const formData = new FormData();
-		formData.append('file', file);
-		return await axios.post('http://localhost:8000/upload', formData, {});
-	};
-	deleteFile = async (fileName) => {
-		const res = await axios.delete(`http://localhost:8000/${fileName}`);
 	};
 	isInputValid = async () => {
 		let count = 0;
@@ -97,32 +94,16 @@ class Uploader extends Component {
 	};
 	onSubmit = async (event) => {
 		event.preventDefault();
-		const filesData = [];
-		const uploadedFileNames = [];
-		for (let i = 0; i < this.state.files.length; i++) {
-			const res = await this.uploadFile(this.state.files[i]);
-			console.log(res.statusText);
-			uploadedFileNames.push(res.data.filename);
-			const datum = await this.convertCSVToJson(
-				`./uploads/${res.data.filename}`
-			);
-			filesData.push(datum);
-		}
-		this.setState({
-			filesData,
-			uploadedFileNames,
-		});
 		const validatedInput = await this.isInputValid();
 
 		if (validatedInput === true && this.state.output === '1') {
 			for (let i = 0; i < this.state.fileNames.length; i++) {
 				createSingleFile(this.state.fileNames[i], this.state.filesData[i]);
-				this.deleteFile(this.state.uploadedFileNames[i]);
 			}
 		} else if (validatedInput === true && this.state.output === '2') {
-			for (let i = 0; i < this.state.fileNames.length; i++) {
-				createMultipleFiles(this.state.fileNames[i], this.state.filesData[i]);
-				this.deleteFile(this.state.uploadedFileNames[i]);
+			const sortedData = sortDataIntoFiles(this.state.filesData);
+			for (let i = 0; i < sortedData.length; i++) {
+				createMultipleFiles(sortedData[i]);
 			}
 		}
 	};
@@ -144,7 +125,7 @@ class Uploader extends Component {
 									multiple
 									onChange={this.onChange}
 								/>
-								<FileInputLabel for="file">Select file(s)</FileInputLabel>
+								<FileInputLabel htmlFor="file">Select file(s)</FileInputLabel>
 							</FileInputWrapper>
 						</FileInputContainer>
 						<Select

@@ -946,7 +946,149 @@ describe('validateInputFormat', () => {
 });
 
 describe('sortDataIntoFiles', () => {
-	it('returns an emtpy array when passed an array', () => {
+	it('returns an emtpy array when passed an empty array', () => {
 		expect(sortDataIntoFiles([])).to.eql([]);
+	});
+	it('condenses two arrays of one object with same centre name by centre name', () => {
+		const testData = [
+			[
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'John Milton',
+				},
+			],
+			[
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Dante Alighieri',
+				},
+			],
+		];
+		expect(sortDataIntoFiles(testData)).to.eql([
+			[
+				{ 'Registration Location Name': 'Jackson Square', name: 'John Milton' },
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Dante Alighieri',
+				},
+			],
+		]);
+	});
+	it('condenses two arrays of one object of different centres by centre name', () => {
+		const testData = [
+			[
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Guy Debord',
+				},
+			],
+			[
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Dante Alighieri',
+				},
+			],
+		];
+		expect(sortDataIntoFiles(testData)).to.eql([
+			[
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Guy Debord',
+				},
+			],
+			[
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Dante Alighieri',
+				},
+			],
+		]);
+	});
+	it('condenses mutiple arrays of mutiple objects of different centres by centre name', () => {
+		const testData = [
+			[
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Guy Debord',
+				},
+				{
+					'Registration Location Name': 'Grosvenor Centre',
+					name: 'Mariana Enriquez',
+				},
+				{ 'Registration Location Name': 'Jackson Square', name: 'John Milton' },
+			],
+			[
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Aldous Huxley',
+				},
+				{
+					'Registration Location Name': 'Grosvenor Centre',
+					name: 'Bram Stoker',
+				},
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Jorge Luis Borges',
+				},
+			],
+			[
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Gabriel García Márquez',
+				},
+				{
+					'Registration Location Name': 'Grosvenor Centre',
+					name: 'William Gibson',
+				},
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Dante Alighieri',
+				},
+			],
+		];
+		expect(sortDataIntoFiles(testData)).to.eql([
+			[
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Guy Debord',
+				},
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Aldous Huxley',
+				},
+				{
+					'Registration Location Name': 'Grafton Centre',
+					name: 'Gabriel García Márquez',
+				},
+			],
+			[
+				{
+					'Registration Location Name': 'Grosvenor Centre',
+					name: 'Mariana Enriquez',
+				},
+				{
+					'Registration Location Name': 'Grosvenor Centre',
+					name: 'Bram Stoker',
+				},
+				{
+					'Registration Location Name': 'Grosvenor Centre',
+					name: 'William Gibson',
+				},
+			],
+			[
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'John Milton',
+				},
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Jorge Luis Borges',
+				},
+				{
+					'Registration Location Name': 'Jackson Square',
+					name: 'Dante Alighieri',
+				},
+			],
+		]);
 	});
 });

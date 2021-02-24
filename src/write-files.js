@@ -20,21 +20,15 @@ const handleSaveToPC = (fileName, jsonArr) => {
 
 // LIM and L&G
 
-const createMultipleFiles = (fileName, data) => {
+const createMultipleFiles = (data) => {
 	const formattedData = data.map((datum) => {
 		return formatDatum(datum);
 	});
-	const filteredByMonth = filterDataByMonth(formattedData);
-	const deDupedAndFilteredByMonth = removeDuplicateEmails(filteredByMonth);
-	const centres = getCentres(data);
-	for (let i = 0; i < centres.length; i++) {
-		fileName = returnFileName(centres[i]);
-		const filteredByCentre = getDataByCentre(
-			deDupedAndFilteredByMonth,
-			centres[i]
-		);
-		handleSaveToPC(fileName, filteredByCentre);
-	}
+
+	const deDuped = removeDuplicateEmails(formattedData);
+	const fileName = returnFileName(deDuped[0]['registration location name']);
+
+	handleSaveToPC(fileName, deDuped);
 };
 
 // Inkspot/Freerunner/ASI
