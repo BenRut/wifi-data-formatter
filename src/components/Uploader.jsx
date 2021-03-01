@@ -9,6 +9,9 @@ import {
 	FileInputLabel,
 	UploaderContainer,
 	Select,
+	SelectArrow,
+	SelectWrapper,
+	SelectCover,
 	FileInputContainer,
 	ErrorMessage,
 	UploaderHeader,
@@ -28,6 +31,7 @@ class Uploader extends Component {
 		filesData: [],
 		errorMessage: '',
 		uploadedFileNames: [],
+		selectIsHovered: false,
 	};
 	onChange = (event) => {
 		const fileNames = [];
@@ -47,6 +51,9 @@ class Uploader extends Component {
 			errorMessage: '',
 			filesData,
 		});
+	};
+	toggleSelectHover = (e) => {
+		this.setState({ selectIsHovered: !this.state.selectIsHovered });
 	};
 	convertCSVToJson = async (str) => {
 		const jsonArr = await csv().fromString(str);
@@ -128,16 +135,24 @@ class Uploader extends Component {
 								<FileInputLabel htmlFor="file">Select file(s)</FileInputLabel>
 							</FileInputWrapper>
 						</FileInputContainer>
-						<Select
-							value={this.state.output}
-							name=""
-							id="wifi-provider"
-							onChange={this.onSelect}
-						>
-							<option value="0">Select Wi-Fi provider</option>
-							<option value="1">Inkspot/Freerunner/BT(ASI)</option>
-							<option value="2">BT(LIM)/BT(L&amp;G)</option>
-						</Select>
+						<SelectWrapper>
+							<Select
+								value={this.state.output}
+								name=""
+								id="wifi-provider"
+								onChange={this.onSelect}
+								onMouseEnter={this.toggleSelectHover}
+								onMouseLeave={this.toggleSelectHover}
+								hover={this.state.selectIsHovered}
+							>
+								<option value="0">Select Wi-Fi provider</option>
+								<option value="1">Inkspot/Freerunner/BT(ASI)</option>
+								<option value="2">BT(LIM)/BT(L&amp;G)</option>
+							</Select>
+							<SelectCover></SelectCover>
+							<SelectArrow hover={this.state.selectIsHovered}></SelectArrow>
+						</SelectWrapper>
+
 						<Button type="submit">
 							<span>Format</span>
 						</Button>

@@ -66,18 +66,19 @@ const ButtonText = styled.span`
 `;
 
 const Button = styled.button`
+	cursor: pointer;
 	margin: 10px;
 	background: none;
 	display: block;
 	border-radius: 30px;
 	border: solid 2px #9164cc;
-	font-size: 14px;
+	font-size: 11px;
 	letter-spacing: 1.4px;
+	text-transform: uppercase;
 	padding: 12px 20px 12px 20px;
 	max-height: 50px;
 	color: #9164cc;
 	max-width: 340px;
-	text-transform: uppercase;
 	overflow: hidden;
 	transition: all 0.2s;
 
@@ -100,11 +101,12 @@ const FileInput = styled.input`
 `;
 
 const FileInputWrapper = styled.div`
+	cursor: pointer;
 	display: block;
 	border-radius: 30px;
 	background: none;
 	border: solid 2px #9164cc;
-	font-size: 14px;
+	font-size: 11px;
 	letter-spacing: 1.4px;
 	padding: 12px 20px 12px 20px;
 	color: #9164cc;
@@ -156,11 +158,11 @@ const UploaderFooter = styled.div`
 
 const FileInputLabel = styled.label``;
 
-const Select = styled.select`
-	height: 50px;
-	margin: 10px;
-	padding: 12px 20px 12px 20px;
-`;
+// const Select = styled.select`
+// 	height: 50px;
+// 	margin: 10px;
+// 	padding: 12px 20px 12px 20px;
+// `;
 
 const FileName = styled.div`
 	min-width: 200px;
@@ -264,6 +266,70 @@ const Shadow = styled.div`
 	position: absolute;
 `;
 
+const SelectWrapper = styled.div`
+	position: relative;
+	display: inline-block;
+	width: 250px;
+`;
+
+const SelectCover = styled.div`
+	width: 100%;
+	height: 100%;
+	z-index: 1;
+	background: none;
+`;
+
+const Select = styled.select`
+	transition: all 0.2s;
+	padding: 12px 20px 12px 20px;
+	z-index: 1;
+	font-size: 11px;
+	font-family: 'Arial';
+	display: inline-block;
+	width: 250px;
+	cursor: pointer;
+	outline: 0;
+	border: 2px solid #9164cc;
+	border-radius: 30px;
+	background: ${(props) => (props.hover ? '#9164cc' : '#ffffff')};
+	color: #9164cc;
+	appearance: none;
+	-webkit-appearance: none;
+	-moz-appearance: none;
+	&::-ms-expand {
+		display: none;
+	}
+	&:hover {
+		color: #ffffff;
+	}
+	/* &:focus {
+		color: #ffffff;
+		background: #9164cc;
+	} */
+	&:disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+`;
+const SelectArrow = styled.div`
+	z-index: 0;
+	position: absolute;
+	top: 0.9em;
+	right: 1em;
+	width: 0px;
+	height: 0px;
+	border: solid #9164cc;
+	border-width: 0 3px 3px 0;
+	display: inline-block;
+	padding: 3px;
+	transform: rotate(45deg);
+	-webkit-transform: rotate(45deg);
+	border-color: ${(props) => (props.hover ? '#ffffff' : '#9164cc')};
+	&:hover {
+		border-color: #9164cc;
+	}
+`;
+
 export {
 	Logo,
 	LogoWrapper,
@@ -275,6 +341,9 @@ export {
 	FileInputWrapper,
 	UploaderContainer,
 	Select,
+	SelectArrow,
+	SelectWrapper,
+	SelectCover,
 	FileName,
 	FileInputContainer,
 	Title,
