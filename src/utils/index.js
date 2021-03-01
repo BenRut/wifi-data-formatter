@@ -114,9 +114,11 @@ exports.formatDatum = (datum) => {
 		lowerCaseDatum['postcode']
 	);
 	if (lowerCaseDatum['week ending']) {
-		lowerCaseDatum['expiry date'] = exports.returnExpiryDate(
-			lowerCaseDatum['week ending']
-		);
+		const weekEnding = this.convertUKDateToUS(lowerCaseDatum['week ending']);
+		const date = new Date(weekEnding);
+		date.setDate(date.getDate() - 7);
+
+		lowerCaseDatum['expiry date'] = exports.returnExpiryDate(date);
 	}
 	if (lowerCaseDatum['creationdate']) {
 		lowerCaseDatum['expiry date'] = exports.returnExpiryDate(

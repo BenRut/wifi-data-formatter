@@ -445,6 +445,33 @@ describe('formatDatum', () => {
 			'expiry date': '05/12/2023',
 		});
 	});
+	it('works for ASI data', () => {
+		const input = {
+			'Week Ending': '29/01/2021',
+			'Federated Group Name': 'ABERDEEN STANDARD INVESTMENTS THISTLES',
+			'Estate Name': 'ABERDEEN STANDARD INVESTMENTS THISTLES',
+			'Location Name': 'Aberdeen Standard Investments Thistles',
+			'First Name': 'John',
+			'Last Name': 'Doe',
+			Email: 'john.doe@gmail.com',
+			Postcode: 'ls284pz',
+			'Marketing Consent': 'Yes',
+		};
+		const output = formatDatum(input);
+		expect(output).to.eql({
+			'week ending': '29/01/2021',
+			'federated group name': 'ABERDEEN STANDARD INVESTMENTS THISTLES',
+			'estate name': 'ABERDEEN STANDARD INVESTMENTS THISTLES',
+			'location name': 'Aberdeen Standard Investments Thistles',
+			'first name': 'John',
+			'last name': 'Doe',
+			email: 'john.doe@gmail.com',
+			postcode: 'LS28 4PZ',
+			'marketing consent': 'Yes',
+			'sign up source': 'wifi',
+			'expiry date': '22/01/2024',
+		});
+	});
 });
 
 describe('removeDuplicateEmails', () => {
