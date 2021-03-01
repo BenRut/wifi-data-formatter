@@ -208,18 +208,19 @@ describe('returnsExpiryDate()', () => {
 	});
 	it('returns a date with year 3 years from date when passed date object', () => {
 		const output = returnExpiryDate(new Date(2000, 0, 1, 0, 0, 0, 0));
-		expect(output).to.eql('1/1/2003');
+		expect(output).to.eql('01/01/2003');
 	});
 	it('returns a date string 3 years from date when passed a date string', () => {
 		const output = returnExpiryDate('01/01/2000');
-		expect(output).to.equal('1/1/2003');
+		expect(output).to.equal('01/01/2003');
 	});
 	it("returns a date 3 years from today's date on the first of last month when not passed a date", () => {
-		const today = new Date();
-		const lastMonth = today.getMonth();
-		const threeYearsFromNow = today.getFullYear() + 3;
+		const d = new Date();
+		const year = d.getFullYear();
+		const month = d.getMonth();
+		const threeYearsfromLastMonth = new Date(year + 3, month - 1, 1);
 		const output = returnExpiryDate();
-		expect(output).to.equal(`1/${lastMonth}/${threeYearsFromNow}`);
+		expect(output).to.equal(`${threeYearsfromLastMonth.toLocaleDateString()}`);
 	});
 });
 
@@ -400,6 +401,15 @@ describe('formatDatum', () => {
 			email: 'jhlkhlkj@live.co.uk',
 		};
 		const output = formatDatum(input);
+		const d = new Date();
+		const year = d.getFullYear();
+		const month = d.getMonth();
+
+		const threeYearsFromLastMonth = new Date(
+			year + 3,
+			month - 1,
+			1
+		).toLocaleDateString();
 		expect(output).to.eql({
 			username: '83902745032984573209854702394857203987',
 			total_downloaded_bytes: '86897021',
@@ -411,7 +421,7 @@ describe('formatDatum', () => {
 			agent_device: 'iPhone',
 			email: 'jhlkhlkj@live.co.uk',
 			'sign up source': 'wifi',
-			'expiry date': '1/1/2024',
+			'expiry date': `${threeYearsFromLastMonth}`,
 		});
 	});
 	it('works for freerunner data', () => {
@@ -432,7 +442,7 @@ describe('formatDatum', () => {
 			postcode: 'BS3 1SN',
 			opt_in: '1',
 			'sign up source': 'wifi',
-			'expiry date': '5/12/2023',
+			'expiry date': '05/12/2023',
 		});
 	});
 });
@@ -588,7 +598,7 @@ describe('filterDataByMonth', () => {
 		const testData = [
 			{
 				username: 'uhfgkjg@gmail.com',
-				creationdate: '2021-02-01 15:09:46',
+				creationdate: '2021-03-01 15:09:46',
 				firstname: 'Chris',
 				lastname: 'Morris',
 				postcode: 'Tu20 7TW',
@@ -596,7 +606,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'jkjvk@yahoo.co.uk',
-				creationdate: '2021-01-30 17:14:01',
+				creationdate: '2021-02-30 17:14:01',
 				firstname: 'Sylvester',
 				lastname: 'Stuart',
 				postcode: 'Ty7 6UV',
@@ -606,7 +616,7 @@ describe('filterDataByMonth', () => {
 		expect(filterDataByMonth(testData)).to.eql([
 			{
 				username: 'jkjvk@yahoo.co.uk',
-				creationdate: '2021-01-30 17:14:01',
+				creationdate: '2021-02-30 17:14:01',
 				firstname: 'Sylvester',
 				lastname: 'Stuart',
 				postcode: 'Ty7 6UV',
@@ -618,7 +628,7 @@ describe('filterDataByMonth', () => {
 		const testData = [
 			{
 				username: 'uhfgkjg@gmail.com',
-				creationdate: '2021-02-01 15:09:46',
+				creationdate: '2021-03-01 15:09:46',
 				firstname: 'Chris',
 				lastname: 'Morris',
 				postcode: 'Tu20 7TW',
@@ -626,7 +636,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'jkjvk@yahoo.co.uk',
-				creationdate: '2021-01-30 17:14:01',
+				creationdate: '2021-02-30 17:14:01',
 				firstname: 'Sylvester',
 				lastname: 'Stuart',
 				postcode: 'Ty7 6UV',
@@ -634,7 +644,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'ijgkjvko@jbkjbk.uk',
-				creationdate: '2021-01-29 14:14:56',
+				creationdate: '2021-02-29 14:14:56',
 				firstname: 'Alan',
 				lastname: 'Partridge',
 				postcode: 'Bd79zy',
@@ -642,7 +652,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'ugkjgkj942@gmail.com',
-				creationdate: '2021-01-29 13:18:52',
+				creationdate: '2021-02-29 13:18:52',
 				firstname: 'Ted',
 				lastname: 'Maul',
 				postcode: 'Hs167QM',
@@ -650,7 +660,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'jhglkl@gmail.com',
-				creationdate: '2020-12-05 15:32:27',
+				creationdate: '2021-01-05 15:32:27',
 				firstname: 'Ali',
 				lastname: 'G',
 				postcode: 'BS1 5JZ',
@@ -658,7 +668,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'igkjhlkhlkhl@gmail.com',
-				creationdate: '2020-12-05 14:22:54',
+				creationdate: '2021-01-05 14:22:54',
 				firstname: 'Bernard',
 				lastname: 'Black',
 				postcode: 'JW307MW',
@@ -666,7 +676,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'kjhgkj@icloud.com',
-				creationdate: '2020-12-05 14:18:35',
+				creationdate: '2021-01-05 14:18:35',
 				firstname: 'Jeremy',
 				lastname: 'Usbourne',
 				postcode: 'HR75 9JW',
@@ -674,7 +684,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'khlkhl@gmail.com',
-				creationdate: '2020-12-05 12:13:04',
+				creationdate: '2021-01-05 12:13:04',
 				firstname: 'Mark',
 				lastname: 'Corrigan',
 				postcode: 'hg5 3nm',
@@ -682,7 +692,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'gohlkhlk@hotmail.co.uk',
-				creationdate: '2020-12-05 11:31:21',
+				creationdate: '2021-01-05 11:31:21',
 				firstname: 'Super',
 				lastname: 'Hanz',
 				postcode: 'BS31SN',
@@ -692,7 +702,7 @@ describe('filterDataByMonth', () => {
 		expect(filterDataByMonth(testData)).to.eql([
 			{
 				username: 'jkjvk@yahoo.co.uk',
-				creationdate: '2021-01-30 17:14:01',
+				creationdate: '2021-02-30 17:14:01',
 				firstname: 'Sylvester',
 				lastname: 'Stuart',
 				postcode: 'Ty7 6UV',
@@ -700,7 +710,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'ijgkjvko@jbkjbk.uk',
-				creationdate: '2021-01-29 14:14:56',
+				creationdate: '2021-02-29 14:14:56',
 				firstname: 'Alan',
 				lastname: 'Partridge',
 				postcode: 'Bd79zy',
@@ -708,7 +718,7 @@ describe('filterDataByMonth', () => {
 			},
 			{
 				username: 'ugkjgkj942@gmail.com',
-				creationdate: '2021-01-29 13:18:52',
+				creationdate: '2021-02-29 13:18:52',
 				firstname: 'Ted',
 				lastname: 'Maul',
 				postcode: 'Hs167QM',
@@ -884,7 +894,7 @@ describe('validateInputFormat', () => {
 			'Marketing Consent': 'Yes',
 		};
 		expect(validateInputFormat(input).isValid).to.equal(true);
-		expect(validateInputFormat(input).dataType).to.equal('1');
+		expect(validateInputFormat(input).dataType).to.equal('3');
 	});
 	it('returns true when passed a Freerunner data object', () => {
 		const input = {

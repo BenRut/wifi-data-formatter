@@ -23,28 +23,36 @@ exports.returnExpiryDate = (date) => {
 		in3Years = new Date(date.setFullYear(date.getFullYear() + 3));
 	}
 	if (!date) {
-		const months = [
-			'1',
-			'2',
-			'3',
-			'4',
-			'5',
-			'6',
-			'7',
-			'8',
-			'9',
-			'10',
-			'11',
-			'12',
-		];
-		const today = new Date();
-		const lastMonth = months.slice(today.getMonth() - 1)[0];
-		const threeYearsFromNow = today.getFullYear() + 3;
-		return `1/${lastMonth}/${threeYearsFromNow}`;
+		// 	const months = [
+		// 		'01',
+		// 		'02',
+		// 		'03',
+		// 		'04',
+		// 		'05',
+		// 		'06',
+		// 		'07',
+		// 		'08',
+		// 		'09',
+		// 		'10',
+		// 		'11',
+		// 		'12',
+		// 	];
+		// 	const today = new Date();
+		// 	const lastMonth = months.slice(today.getMonth() - 1)[0];
+		// 	const threeYearsFromNow = today.getFullYear() + 3;
+		// 	return `01/${lastMonth}/${threeYearsFromNow}`;
+
+		const d = new Date();
+		const year = d.getFullYear();
+		const month = d.getMonth();
+
+		in3Years = new Date(year + 3, month - 1, 1);
 	}
-	return `${in3Years.getUTCDate()}/${
-		in3Years.getUTCMonth() + 1
-	}/${in3Years.getUTCFullYear()}`;
+
+	// return `${in3Years.getDate()}/${
+	// 	in3Years.getMonth() + 1
+	// }/${in3Years.getFullYear()}`;
+	return in3Years.toLocaleDateString();
 };
 
 exports.getDataByCentre = (data, centre) => {
@@ -57,6 +65,15 @@ exports.getCentres = (data) => {
 	return data.reduce((centres, datum) => {
 		if (!centres.includes(datum['Registration Location Name'])) {
 			centres.push(datum['Registration Location Name']);
+		}
+		return centres;
+	}, []);
+};
+
+exports.getASICentres = (data) => {
+	return data.reduce((centres, datum) => {
+		if (!centres.includes(datum['Location Name'])) {
+			centres.push(datum['Location Name']);
 		}
 		return centres;
 	}, []);
@@ -165,7 +182,7 @@ exports.filterDataByMonth = (data, month) => {
 	}
 	return data.filter((datum) => {
 		if (!month) {
-			return datum['creationdate'].slice(0, 10).split('-')[1] === month;
+			return datum['creationdate'].slice(0, 10).split('-')[1] == month;
 		} else {
 			return datum['creationdate'].slice(0, 10).split('-')[1] == month;
 		}
@@ -215,7 +232,7 @@ exports.validateInputFormat = (object) => {
 	) {
 		return {
 			isValid: true,
-			dataType: '1',
+			dataType: '3',
 		};
 	} else if (
 		exports.arrayCompare(Object.keys(object), [
@@ -303,6 +320,62 @@ exports.sortDataIntoFiles = (data) => {
 				files[i] = [];
 				files[i].push(item);
 			} else if (item['Registration Location Name'] === centre) {
+				files[i].push(item);
+			} else if (item['Location Name'] === centre && !files[i]) {
+				files[i] = [];
+				files[i].push(item);
+			} else if (item['Location Name'] === centre) {
+				files[i].push(item);
+			}
+		});
+	});
+	return files;
+};
+
+exports.sortDataIntoFiles = (data) => {
+	if (data.length === 0) return data;
+
+	const files = [];
+
+	const flattenedArr = data.reduce((acc, item) => {
+		return acc.concat(item);
+	}, []);
+
+	const centres = exports.getCentres(flattenedArr);
+	flattenedArr.forEach((item) => {
+		centres.forEach((centre, i) => {
+			if (item['Registration Location Name'] === centre && !files[i]) {
+				files[i] = [];
+				files[i].push(item);
+			} else if (item['Registration Location Name'] === centre) {
+				files[i].push(item);
+			} else if (item['Location Name'] === centre && !files[i]) {
+				files[i] = [];
+				files[i].push(item);
+			} else if (item['Location Name'] === centre) {
+				files[i].push(item);
+			}
+		});
+	});
+	return files;
+};
+
+exports.sortASIDataIntoFiles = (data) => {
+	if (data.length === 0) return data;
+
+	const files = [];
+
+	const flattenedArr = data.reduce((acc, item) => {
+		return acc.concat(item);
+	}, []);
+
+	const centres = exports.getASICentres(flattenedArr);
+	flattenedArr.forEach((item) => {
+		centres.forEach((centre, i) => {
+			if (item['Location Name'] === centre && !files[i]) {
+				files[i] = [];
+				files[i].push(item);
+			} else if (item['Location Name'] === centre) {
 				files[i].push(item);
 			}
 		});

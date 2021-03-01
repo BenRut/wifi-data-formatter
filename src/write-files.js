@@ -31,6 +31,17 @@ const createMultipleFiles = (data) => {
 	handleSaveToPC(fileName, deDuped);
 };
 
+const createASIFiles = (data) => {
+	const formattedData = data.map((datum) => {
+		return formatDatum(datum);
+	});
+
+	const deDuped = removeDuplicateEmails(formattedData);
+	const fileName = returnFileName(deDuped[0]['location name']);
+
+	handleSaveToPC(fileName, deDuped);
+};
+
 // Inkspot/Freerunner/ASI
 
 const createSingleFile = (fileName, data) => {
@@ -49,4 +60,5 @@ const createSingleFile = (fileName, data) => {
 module.exports = {
 	createMultipleFiles,
 	createSingleFile,
+	createASIFiles,
 };

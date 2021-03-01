@@ -1,6 +1,14 @@
 import React, { Component } from 'react';
-import { validateInputFormat, sortDataIntoFiles } from '../utils';
-import { createSingleFile, createMultipleFiles } from '../write-files';
+import {
+	validateInputFormat,
+	sortDataIntoFiles,
+	sortASIDataIntoFiles,
+} from '../utils';
+import {
+	createSingleFile,
+	createMultipleFiles,
+	createASIFiles,
+} from '../write-files';
 import {
 	Button,
 	Form,
@@ -11,7 +19,6 @@ import {
 	Select,
 	SelectArrow,
 	SelectWrapper,
-	SelectCover,
 	FileInputContainer,
 	ErrorMessage,
 	UploaderHeader,
@@ -112,6 +119,11 @@ class Uploader extends Component {
 			for (let i = 0; i < sortedData.length; i++) {
 				createMultipleFiles(sortedData[i]);
 			}
+		} else if (validatedInput === true && this.state.output === '3') {
+			const sortedData = sortASIDataIntoFiles(this.state.filesData);
+			for (let i = 0; i < sortedData.length; i++) {
+				createASIFiles(sortedData[i]);
+			}
 		}
 	};
 	onSelect = (event) => {
@@ -146,10 +158,10 @@ class Uploader extends Component {
 								hover={this.state.selectIsHovered}
 							>
 								<option value="0">Select Wi-Fi provider</option>
-								<option value="1">Inkspot/Freerunner/BT(ASI)</option>
+								<option value="1">Inkspot/Freerunner</option>
 								<option value="2">BT(LIM)/BT(L&amp;G)</option>
+								<option value="3">BT(ASI)</option>
 							</Select>
-							<SelectCover></SelectCover>
 							<SelectArrow hover={this.state.selectIsHovered}></SelectArrow>
 						</SelectWrapper>
 
