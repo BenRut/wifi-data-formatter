@@ -68,10 +68,11 @@ const ButtonText = styled.span`
 const Button = styled.button`
 	cursor: pointer;
 	margin: 10px;
-	background: none;
+	background: #f2f2f2;
 	display: block;
 	border-radius: 30px;
-	border: solid 2px #9164cc;
+	/* border: solid 2px #9164cc; */
+	border: none;
 	font-size: 11px;
 	letter-spacing: 1.4px;
 	text-transform: uppercase;
@@ -81,10 +82,14 @@ const Button = styled.button`
 	max-width: 340px;
 	overflow: hidden;
 	transition: all 0.2s;
+	border-radius: 50px;
+
+	box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff;
 
 	&:hover {
-		background: #9164cc;
-		color: #fff;
+		/* background: #9164cc;
+		color: #fff; */
+		background: #ffffff;
 	}
 `;
 
@@ -101,7 +106,7 @@ const FileInput = styled.input`
 `;
 
 const FileInputWrapper = styled.div`
-	cursor: pointer;
+	/* cursor: pointer;
 	display: block;
 	border-radius: 30px;
 	background: none;
@@ -116,26 +121,61 @@ const FileInputWrapper = styled.div`
 	&:hover {
 		background: #9164cc;
 		color: #fff;
+	} */
+	cursor: pointer;
+	margin: 10px;
+	background: #f2f2f2;
+	display: block;
+	border-radius: 30px;
+	/* border: solid 2px #9164cc; */
+	border: none;
+	font-size: 11px;
+	letter-spacing: 1.4px;
+	text-transform: uppercase;
+	padding: 12px 20px 12px 20px;
+	max-height: 50px;
+	color: #9164cc;
+	max-width: 340px;
+	overflow: hidden;
+	transition: all 0.2s;
+	border-radius: 50px;
+
+	box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff;
+
+	&:hover {
+		/* background: #9164cc;
+		color: #fff; */
+		/* box-shadow: inset -5px 5px 10px #d9d9d9, inset 6px 0px 10px #ffffff; */
+		background: #ffffff;
 	}
 `;
 
 const UploaderContainer = styled.div`
-	box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
+	/* box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
 	-webkit-box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
-	-moz-box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88);
+	-moz-box-shadow: -1px 0px 43px -16px rgba(0, 0, 0, 0.88); */
 	border-radius: 20px;
-	height: 400px;
+	height: 430px;
 	width: 600px;
 	margin: 25px;
 	display: flex;
 	flex-direction: column;
+	border-radius: 18px;
+	border-radius: 18px;
+
+	/* border-radius: 77px; */
+	background: #f2f2f2;
+
+	/* box-shadow: inset -5px 5px 10px #b0b0b0, inset 5px -5px 10px #ffffff; */
+
+	box-shadow: -5px 5px 10px #b0b0b0, 5px -5px 10px #ffffff;
 `;
 
 const UploaderHeader = styled.div`
 	border-radius: 20px 20px 0 0;
 	width: 100%;
 	height: 100px;
-	background: #fff;
+	/* background: #f2f2f2; */
 	align-self: flex-start;
 	display: flex;
 	justify-content: center;
@@ -143,12 +183,12 @@ const UploaderHeader = styled.div`
 `;
 
 const UploaderFooter = styled.div`
-	box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.88);
-	position: absolute;
-	bottom: 0;
-	border-radius: 0 0 20px 20px;
+	/* box-shadow: 0 4px 2px -2px rgba(0, 0, 0, 0.88); */
+	/* position: absolute;
+	bottom: 0; */
+	border-radius: 0 0 18px 18px;
 	width: 600px;
-	height: 100px;
+	height: 105px;
 	background: #9164cc;
 	align-self: flex-end;
 	display: flex;
@@ -156,7 +196,9 @@ const UploaderFooter = styled.div`
 	align-items: center;
 `;
 
-const FileInputLabel = styled.label``;
+const FileInputLabel = styled.label`
+	cursor: pointer;
+`;
 
 // const Select = styled.select`
 // 	height: 50px;
@@ -242,18 +284,22 @@ const FileListContainer = styled.div`
 
 const FileCard = styled.div`
 	height: 100px;
-	width: 100%;
-	border-top: solid 1px #dddddd;
-	border-bottom: solid 1px #dddddd;
+	width: 596px;
+	/* background: #fff; */
+	/* border-top: solid 1px #b0b0b0; */
+	/* border-bottom: solid 1px #b0b0b0; */
 	display: flex;
 	align-items: center;
+	margin: 5px 2px 5px 2px;
+	border-radius: 10px;
+	box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff;
 `;
 
 const Thumbnail = styled.div`
 	background: #ddd;
 	color: white;
-	height: 70px;
-	width: 70px;
+	min-height: 70px;
+	min-width: 70px;
 	font-weight: 700;
 	font-size: 25px;
 	display: flex;
@@ -289,9 +335,11 @@ const Select = styled.select`
 	width: 250px;
 	cursor: pointer;
 	outline: 0;
-	border: 2px solid #9164cc;
+	/* border: 2px solid #9164cc; */
+	border: none;
 	border-radius: 30px;
-	background: ${(props) => (props.hover ? '#9164cc' : '#ffffff')};
+	/* background: ${(props) => (props.hover ? '#9164cc' : '#ffffff')}; */
+	background: #f2f2f2;
 	color: #9164cc;
 	appearance: none;
 	-webkit-appearance: none;
@@ -300,7 +348,8 @@ const Select = styled.select`
 		display: none;
 	}
 	&:hover {
-		color: #ffffff;
+		/* color: #ffffff; */
+		box-shadow: inset -5px 5px 10px #d9d9d9, inset 6px 0px 10px #ffffff;
 	}
 	/* &:focus {
 		color: #ffffff;
@@ -310,6 +359,7 @@ const Select = styled.select`
 		opacity: 0.5;
 		pointer-events: none;
 	}
+	box-shadow: inset -3px 3px 7px #d9d9d9, inset 3px -3px 7px #ffffff;
 `;
 const SelectArrow = styled.div`
 	z-index: 0;
@@ -324,9 +374,9 @@ const SelectArrow = styled.div`
 	padding: 3px;
 	transform: rotate(45deg);
 	-webkit-transform: rotate(45deg);
-	border-color: ${(props) => (props.hover ? '#ffffff' : '#9164cc')};
+	/* border-color: ${(props) => (props.hover ? '#ffffff' : '#9164cc')}; */
 	&:hover {
-		border-color: #9164cc;
+		/* border-color: #9164cc; */
 	}
 `;
 

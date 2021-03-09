@@ -12,6 +12,7 @@ const {
 	removeDuplicateEmails,
 	validateInputFormat,
 	sortDataIntoFiles,
+	getExpiryDateFromFileName,
 } = require('../utils');
 const testData = [
 	{
@@ -1127,5 +1128,24 @@ describe('sortDataIntoFiles', () => {
 				},
 			],
 		]);
+	});
+});
+
+describe('getExpiryDateFromFileName', () => {
+	it('returns expiry date for BT files', () => {
+		expect(
+			getExpiryDateFromFileName(
+				'JonesLangLasalle_Legal_General_210129.csv',
+				'bt-mult'
+			)
+		).to.equal('22/01/2024');
+	});
+	it('returns expiry date for inkspot files', () => {
+		expect(
+			getExpiryDateFromFileName(
+				'Coliseum Shopping Park_2021-01-01_to_2021-01-31_user_data.csv',
+				'inkspot'
+			)
+		).to.equal('01/01/2024');
 	});
 });

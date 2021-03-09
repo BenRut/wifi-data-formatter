@@ -384,3 +384,26 @@ exports.sortASIDataIntoFiles = (data) => {
 	});
 	return files;
 };
+
+exports.getExpiryDateFromFileName = (fileName, provider) => {
+	const response = {
+		inkspot: () => {
+			const dateRegex = /\d{4}-\d{2}-\d{2}/;
+			const date = fileName.match(dateRegex)[0];
+			const dateObj = new Date(date);
+			return this.returnExpiryDate(dateObj);
+		},
+		'bt-mult': () => {
+			const dateRegex = /\d{6}/g;
+			const date = fileName.match(dateRegex)[0];
+			const year = `20${date.slice(0, 2)}`;
+			const month = date.slice(2, 4);
+			const day = date.slice(4);
+			const dateString = `${year}-${month}-${day}`;
+			const dateObj = new Date(dateString);
+			dateObj.setDate(dateObj.getDate() - 7);
+			return this.returnExpiryDate(dateObj);
+		},
+	};
+	return response[provider]();
+};
