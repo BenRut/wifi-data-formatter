@@ -77,7 +77,7 @@ exports.returnFileName = (centre) => {
 		'dec',
 	];
 	const lastMonth = months.slice(today.getMonth() - 1)[0];
-	return `${centre.split(' ').join('-').toLowerCase()}-${lastMonth}-wifi.csv`;
+	return `${centre.split(' ').join('-').toLowerCase()}-${lastMonth}-wifi.xlsx`;
 };
 
 exports.objectKeysToLowerCase = (object) => {
@@ -240,6 +240,25 @@ exports.validateInputFormat = (object) => {
 			'gender',
 			'agent_device',
 			'email',
+		])
+	) {
+		return {
+			isValid: true,
+			dataType: '4',
+		};
+	} else if (
+		this.arrayCompare(Object.keys(object), [
+			'mac',
+			'email',
+			'age',
+			'device_name',
+			'gender_name',
+			'postcode',
+			'newsletter',
+			'total_downloaded_bytes',
+			'total_uploaded_bytes',
+			'total_sessions',
+			'online_time_seconds',
 		])
 	) {
 		return {

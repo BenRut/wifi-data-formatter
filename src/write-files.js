@@ -1,3 +1,5 @@
+import * as XLSX from 'xlsx';
+
 const {
 	getCentres,
 	getDataByCentre,
@@ -6,16 +8,12 @@ const {
 	filterDataByMonth,
 	removeDuplicateEmails,
 } = require('./utils');
-const Papa = require('papaparse');
 
 const handleSaveToPC = (fileName, jsonArr) => {
-	const fileData = Papa.unparse(jsonArr);
-	const blob = new Blob([fileData], { type: 'csv' });
-	const url = URL.createObjectURL(blob);
-	const link = document.createElement('a');
-	link.download = `${fileName}`;
-	link.href = url;
-	link.click();
+	const ws = XLSX.utils.json_to_sheet(jsonArr);
+	const wb = XLSX.utils.book_new();
+	XLSX.utils.book_append_sheet(wb, ws, 'wifi-data');
+	XLSX.writeFile(wb, fileName);
 };
 
 // LIM and L&G
@@ -57,8 +55,4 @@ const createSingleFile = (fileName, data) => {
 	);
 };
 
-module.exports = {
-	createMultipleFiles,
-	createSingleFile,
-	createASIFiles,
-};
+export { createMultipleFiles, createSingleFile, createASIFiles };
