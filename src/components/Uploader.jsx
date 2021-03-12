@@ -3,6 +3,7 @@ import {
 	validateInputFormat,
 	sortDataIntoFiles,
 	sortASIDataIntoFiles,
+	getExpiryDateFromFileName,
 } from '../utils';
 import {
 	createSingleFile,
@@ -27,6 +28,8 @@ import {
 	FileCard,
 	Thumbnail,
 	FileListContainer,
+	ButtonWrapper,
+	InnerButtonWrapper,
 } from '../styles';
 const csv = require('csvtojson');
 
@@ -108,21 +111,41 @@ class Uploader extends Component {
 	};
 	onSubmit = async (event) => {
 		event.preventDefault();
+		const { output, fileNames, filesData } = this.state;
 		const validatedInput = await this.isInputValid();
 
-		if (validatedInput === true && this.state.output === '1') {
-			for (let i = 0; i < this.state.fileNames.length; i++) {
-				createSingleFile(this.state.fileNames[i], this.state.filesData[i]);
+		if (validatedInput === true && output === '1') {
+			for (let i = 0; i < fileNames.length; i++) {
+				createSingleFile(fileNames[i], filesData[i]);
 			}
-		} else if (validatedInput === true && this.state.output === '2') {
-			const sortedData = sortDataIntoFiles(this.state.filesData);
+		} else if (validatedInput === true && output === '2') {
+			for (let i = 0; i < filesData.length; i++) {
+				for (let j = 0; j < filesData[i].length; j++) {
+					console.log(filesData[i][j]);
+					filesData[i][j]['expiry date'] = getExpiryDateFromFileName(
+						fileNames[i],
+						'bt-mult'
+					);
+				}
+			}
+			const sortedData = sortDataIntoFiles(filesData);
 			for (let i = 0; i < sortedData.length; i++) {
 				createMultipleFiles(sortedData[i]);
 			}
-		} else if (validatedInput === true && this.state.output === '3') {
-			const sortedData = sortASIDataIntoFiles(this.state.filesData);
+		} else if (validatedInput === true && output === '3') {
+			const sortedData = sortASIDataIntoFiles(filesData);
 			for (let i = 0; i < sortedData.length; i++) {
 				createASIFiles(sortedData[i]);
+			}
+		} else if (validatedInput === true && output === '4') {
+			for (let i = 0; i < filesData.length; i++) {
+				for (let j = 0; j < filesData[i].length; j++) {
+					filesData[i][j]['expiry date'] = getExpiryDateFromFileName(
+						fileNames[i],
+						'inkspot'
+					);
+				}
+				createSingleFile(fileNames[i], filesData[i]);
 			}
 		}
 	};
@@ -135,18 +158,25 @@ class Uploader extends Component {
 				<Form onSubmit={this.onSubmit} action="">
 					<UploaderHeader>
 						<FileInputContainer>
-							<FileInputWrapper>
-								<FileInput
-									type="file"
-									id="file"
-									name="file"
-									accept=".csv"
-									multiple
-									onChange={this.onChange}
-								/>
-								<FileInputLabel htmlFor="file">Select file(s)</FileInputLabel>
-							</FileInputWrapper>
+							<ButtonWrapper>
+								<InnerButtonWrapper>
+									<FileInputWrapper>
+										<FileInput
+											type="file"
+											id="file"
+											name="file"
+											accept=".csv"
+											multiple
+											onChange={this.onChange}
+										/>
+										<FileInputLabel htmlFor="file">
+											Select file(s)
+										</FileInputLabel>
+									</FileInputWrapper>
+								</InnerButtonWrapper>
+							</ButtonWrapper>
 						</FileInputContainer>
+
 						<SelectWrapper>
 							<Select
 								value={this.state.output}
@@ -158,23 +188,27 @@ class Uploader extends Component {
 								hover={this.state.selectIsHovered}
 							>
 								<option value="0">Select Wi-Fi provider</option>
-								<option value="1">Inkspot/Freerunner</option>
+								<option value="1">Freerunner</option>
 								<option value="2">BT(LIM)/BT(L&amp;G)</option>
 								<option value="3">BT(ASI)</option>
+								<option value="4">Inkspot</option>
 							</Select>
 							<SelectArrow hover={this.state.selectIsHovered}></SelectArrow>
 						</SelectWrapper>
-
-						<Button type="submit">
-							<span>Format</span>
-						</Button>
+						<ButtonWrapper>
+							<InnerButtonWrapper>
+								<Button type="submit">
+									<span>Format</span>
+								</Button>
+							</InnerButtonWrapper>
+						</ButtonWrapper>
 					</UploaderHeader>
 				</Form>
 				<FileListContainer>
 					<FileList>
-						{this.state.fileNames.map((fileName) => {
+						{this.state.fileNames.map((fileName, index) => {
 							return (
-								<FileCard>
+								<FileCard key={index}>
 									<Thumbnail>.CSV</Thumbnail>
 									{fileName}
 								</FileCard>

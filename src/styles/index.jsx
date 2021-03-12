@@ -67,11 +67,11 @@ const ButtonText = styled.span`
 
 const Button = styled.button`
 	cursor: pointer;
-	margin: 10px;
-	background: #f2f2f2;
+	background: linear-gradient(225deg, #ffffff, #f2f2f2);
+	/* background: #f2f2f2; */
 	display: block;
 	border-radius: 30px;
-	/* border: solid 2px #9164cc; */
+	/* border: solid 0.25px #b0b0b0; */
 	border: none;
 	font-size: 11px;
 	letter-spacing: 1.4px;
@@ -84,13 +84,39 @@ const Button = styled.button`
 	transition: all 0.2s;
 	border-radius: 50px;
 
-	box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff;
-
 	&:hover {
 		/* background: #9164cc;
 		color: #fff; */
-		background: #ffffff;
+		background: none;
+		box-shadow: inset -1px 1px 3px #bebebe, inset 1px -1px 3px #f2f2f2;
 	}
+`;
+
+const ButtonWrapper = styled.div`
+	margin: 10px;
+	cursor: pointer;
+
+	/* border: solid 2px #9164cc; */
+	border: none;
+
+	color: #9164cc;
+
+	overflow: hidden;
+	transition: all 0.2s;
+	border-radius: 50px;
+	box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff;
+`;
+
+const InnerButtonWrapper = styled.div`
+	padding: 5px;
+	background-image: linear-gradient(
+		to left bottom,
+		#ededed,
+		#f1f1f1,
+		#f6f6f6,
+		#fafafa,
+		#ffffff
+	);
 `;
 
 const Form = styled.form`
@@ -123,8 +149,8 @@ const FileInputWrapper = styled.div`
 		color: #fff;
 	} */
 	cursor: pointer;
-	margin: 10px;
-	background: #f2f2f2;
+
+	/* background: #f2f2f2; */
 	display: block;
 	border-radius: 30px;
 	/* border: solid 2px #9164cc; */
@@ -139,8 +165,15 @@ const FileInputWrapper = styled.div`
 	overflow: hidden;
 	transition: all 0.2s;
 	border-radius: 50px;
+	background: linear-gradient(225deg, #ffffff, #f2f2f2);
+	&:hover {
+		/* background: #9164cc;
+		color: #fff; */
+		background: none;
+		box-shadow: inset -1px 1px 3px #bebebe, inset 1px -1px 3px #f2f2f2;
+	}
 
-	box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff;
+	/* box-shadow: -3px 3px 5px #b0b0b0, 3px -3px 5px #ffffff; */
 
 	&:hover {
 		/* background: #9164cc;
@@ -405,4 +438,6 @@ export {
 	FileCard,
 	Thumbnail,
 	FileListContainer,
+	ButtonWrapper,
+	InnerButtonWrapper,
 };

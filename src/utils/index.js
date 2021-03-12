@@ -16,32 +16,13 @@ exports.convertUKDateToUS = (dateString) => {
 exports.returnExpiryDate = (date) => {
 	let in3Years;
 	if (typeof date === 'string') {
-		const dateObj = new Date(exports.convertUKDateToUS(date));
+		const dateObj = new Date(this.convertUKDateToUS(date));
 		in3Years = new Date(dateObj.setFullYear(dateObj.getFullYear() + 3));
 	}
 	if (typeof date === 'object') {
 		in3Years = new Date(date.setFullYear(date.getFullYear() + 3));
 	}
 	if (!date) {
-		// 	const months = [
-		// 		'01',
-		// 		'02',
-		// 		'03',
-		// 		'04',
-		// 		'05',
-		// 		'06',
-		// 		'07',
-		// 		'08',
-		// 		'09',
-		// 		'10',
-		// 		'11',
-		// 		'12',
-		// 	];
-		// 	const today = new Date();
-		// 	const lastMonth = months.slice(today.getMonth() - 1)[0];
-		// 	const threeYearsFromNow = today.getFullYear() + 3;
-		// 	return `01/${lastMonth}/${threeYearsFromNow}`;
-
 		const d = new Date();
 		const year = d.getFullYear();
 		const month = d.getMonth();
@@ -108,25 +89,20 @@ exports.objectKeysToLowerCase = (object) => {
 };
 
 exports.formatDatum = (datum) => {
-	const lowerCaseDatum = exports.objectKeysToLowerCase(datum);
+	const lowerCaseDatum = this.objectKeysToLowerCase(datum);
 	lowerCaseDatum['sign up source'] = 'wifi';
-	lowerCaseDatum['postcode'] = exports.formatPostcode(
-		lowerCaseDatum['postcode']
-	);
+	lowerCaseDatum['postcode'] = this.formatPostcode(lowerCaseDatum['postcode']);
 	if (lowerCaseDatum['week ending']) {
 		const weekEnding = this.convertUKDateToUS(lowerCaseDatum['week ending']);
 		const date = new Date(weekEnding);
 		date.setDate(date.getDate() - 7);
 
-		lowerCaseDatum['expiry date'] = exports.returnExpiryDate(date);
+		lowerCaseDatum['expiry date'] = this.returnExpiryDate(date);
 	}
 	if (lowerCaseDatum['creationdate']) {
-		lowerCaseDatum['expiry date'] = exports.returnExpiryDate(
+		lowerCaseDatum['expiry date'] = this.returnExpiryDate(
 			lowerCaseDatum['creationdate'].slice(0, 10).split('-').reverse().join('/')
 		);
-	}
-	if (!lowerCaseDatum['week ending'] && !lowerCaseDatum['creationdate']) {
-		lowerCaseDatum['expiry date'] = exports.returnExpiryDate();
 	}
 	return lowerCaseDatum;
 };
@@ -220,7 +196,7 @@ exports.validateInputFormat = (object) => {
 			dataType: 'n/a',
 		};
 	if (
-		exports.arrayCompare(Object.keys(object), [
+		this.arrayCompare(Object.keys(object), [
 			'Email',
 			'Estate Name',
 			'Federated Group Name',
@@ -237,7 +213,7 @@ exports.validateInputFormat = (object) => {
 			dataType: '3',
 		};
 	} else if (
-		exports.arrayCompare(Object.keys(object), [
+		this.arrayCompare(Object.keys(object), [
 			'Email Address',
 			'Title',
 			'Forename',
@@ -254,7 +230,7 @@ exports.validateInputFormat = (object) => {
 			dataType: '2',
 		};
 	} else if (
-		exports.arrayCompare(Object.keys(object), [
+		this.arrayCompare(Object.keys(object), [
 			'username',
 			'total_downloaded_bytes',
 			'total_uploaded_bytes',
@@ -268,10 +244,10 @@ exports.validateInputFormat = (object) => {
 	) {
 		return {
 			isValid: true,
-			dataType: '1',
+			dataType: '4',
 		};
 	} else if (
-		exports.arrayCompare(Object.keys(object), [
+		this.arrayCompare(Object.keys(object), [
 			'username',
 			'creationdate',
 			'firstname',
@@ -285,7 +261,7 @@ exports.validateInputFormat = (object) => {
 			dataType: '1',
 		};
 	} else if (
-		exports.arrayCompare(Object.keys(object), [
+		this.arrayCompare(Object.keys(object), [
 			'Email Address',
 			'Title',
 			'Forename',
@@ -315,7 +291,7 @@ exports.sortDataIntoFiles = (data) => {
 		return acc.concat(item);
 	}, []);
 
-	const centres = exports.getCentres(flattenedArr);
+	const centres = this.getCentres(flattenedArr);
 	flattenedArr.forEach((item) => {
 		centres.forEach((centre, i) => {
 			if (item['Registration Location Name'] === centre && !files[i]) {
@@ -343,7 +319,7 @@ exports.sortDataIntoFiles = (data) => {
 		return acc.concat(item);
 	}, []);
 
-	const centres = exports.getCentres(flattenedArr);
+	const centres = this.getCentres(flattenedArr);
 	flattenedArr.forEach((item) => {
 		centres.forEach((centre, i) => {
 			if (item['Registration Location Name'] === centre && !files[i]) {
@@ -371,7 +347,7 @@ exports.sortASIDataIntoFiles = (data) => {
 		return acc.concat(item);
 	}, []);
 
-	const centres = exports.getASICentres(flattenedArr);
+	const centres = this.getASICentres(flattenedArr);
 	flattenedArr.forEach((item) => {
 		centres.forEach((centre, i) => {
 			if (item['Location Name'] === centre && !files[i]) {
